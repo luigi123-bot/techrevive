@@ -136,7 +136,7 @@ export default function Testimonials() {
                 {/* CTA */}
                 <div className="cta-box">
                     <p>¿Quieres ser el próximo cliente satisfecho?</p>
-                    <a href="https://wa.me/58412000000" target="_blank" rel="noopener noreferrer" className="btn-primary">
+                    <a href="https://wa.me/573023140199" target="_blank" rel="noopener noreferrer" className="btn-primary">
                         ¡Contáctanos ahora!
                     </a>
                 </div>

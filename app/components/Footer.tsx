@@ -4,11 +4,11 @@ export default function Footer() {
     const year = new Date().getFullYear();
 
     const services = [
-        { label: 'Reparación de PC & Laptops', href: '#servicios' },
-        { label: 'Mantenimiento preventivo', href: '#servicios' },
-        { label: 'Actualización de hardware', href: '#servicios' },
-        { label: 'Instalación de programas', href: '#servicios' },
-        { label: 'Armado de PCs Gamer', href: '#servicios' },
+        { label: 'Infraestructura Cloud', href: '#servicios' },
+        { label: 'Desarrollo Web Apps', href: '#servicios' },
+        { label: 'Automatización IA', href: '#servicios' },
+        { label: 'Reparación Técnica', href: '#servicios' },
+        { label: 'Armado de PCs', href: '#servicios' },
     ];
 
     const info = [
@@ -41,7 +41,7 @@ export default function Footer() {
         },
         {
             id: 'footer-whatsapp',
-            href: 'https://wa.me/58412000000',
+            href: 'https://wa.me/573023140199',
             label: 'WhatsApp',
             icon: (
                 <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
@@ -118,13 +118,13 @@ export default function Footer() {
                     <div className="contact-col">
                         <h4>Contacto</h4>
                         <div className="contact-info-list">
-                            <a href="https://wa.me/58412000000" target="_blank" rel="noopener noreferrer" className="whatsapp-link">
+                            <a href="https://wa.me/573023140199" target="_blank" rel="noopener noreferrer" className="whatsapp-link">
                                 <div className="contact-label">WHATSAPP</div>
-                                <div className="whatsapp-val">+58 412-000-0000</div>
+                                <div className="whatsapp-val">+57 302-314-0199</div>
                             </a>
                             <div className="contact-item">
                                 <div className="contact-label">TELÉFONO</div>
-                                <div className="contact-val">+58 212-000-0000</div>
+                                <div className="contact-val">+57 302-314-0199</div>
                             </div>
                             <div className="contact-item">
                                 <div className="contact-label">EMAIL</div>

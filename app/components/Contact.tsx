@@ -12,18 +12,44 @@ export default function Contact() {
         setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const msg = encodeURIComponent(
-            `Hola TechRevive! 👋\n\n` +
-            `*Nombre:* ${formData.name}\n` +
-            `*Email:* ${formData.email}\n` +
-            `*Teléfono:* ${formData.phone}\n` +
-            `*Servicio:* ${formData.service}\n\n` +
-            `*Mensaje:*\n${formData.message}`
-        );
-        window.open(`https://wa.me/58412000000?text=${msg}`, '_blank');
-        setSent(true);
+        setSent(false);
+
+        try {
+            // Save to database
+            const response = await fetch('/api/requests', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: formData.name,
+                    email: formData.email,
+                    phone: formData.phone,
+                    service: formData.service,
+                    message: formData.message,
+                    source: 'web_form'
+                }),
+            });
+
+            if (!response.ok) {
+                console.error('Failed to save request to DB');
+            }
+
+            // Open WhatsApp
+            const msg = encodeURIComponent(
+                `Hola TechRevive! 👋\n\n` +
+                `*Nombre:* ${formData.name}\n` +
+                `*Email:* ${formData.email}\n` +
+                `*Teléfono:* ${formData.phone}\n` +
+                `*Servicio:* ${formData.service}\n\n` +
+                `*Mensaje:*\n${formData.message}`
+            );
+            window.open(`https://wa.me/573023140199?text=${msg}`, '_blank');
+            setSent(true);
+            setFormData({ name: '', email: '', phone: '', service: '', message: '' });
+        } catch (error) {
+            console.error('Error in contact form submission:', error);
+        }
     };
 
     const contactItems = [
@@ -35,9 +61,9 @@ export default function Contact() {
                 </svg>
             ),
             label: 'WhatsApp',
-            value: '+58 412-000-0000',
+            value: '+57 302-314-0199',
             sub: 'Respuesta inmediata',
-            href: 'https://wa.me/58412000000',
+            href: 'https://wa.me/573023140199',
             color: '#25D366',
         },
         {

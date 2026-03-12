@@ -4,7 +4,7 @@ export default function FloatingWhatsApp() {
     return (
         <>
             <a
-                href="https://wa.me/58412000000?text=Hola%2C+necesito+soporte+técnico"
+                href="https://wa.me/573023140199?text=Hola%2C+necesito+soporte+técnico"
                 target="_blank"
                 rel="noopener noreferrer"
                 id="floating-whatsapp-btn"

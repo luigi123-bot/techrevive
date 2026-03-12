@@ -11,7 +11,22 @@ import Footer from "./components/Footer";
 import ChatBot from "./components/ChatBot";
 import FloatingWhatsApp from "./components/FloatingWhatsApp";
 
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
 export default function Home() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const user = localStorage.getItem('user');
+    if (user) {
+      const parsedUser = JSON.parse(user);
+      if (parsedUser.role === 'admin') {
+        router.push('/admin');
+      }
+    }
+  }, []);
+
   return (
     <main className="main-page">
       <Navbar />
