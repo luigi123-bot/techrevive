@@ -53,8 +53,8 @@ export default function Hero() {
                     </h1>
 
                     <p className="hero-description">
-                        Especialistas en reparación, mantenimiento y actualización de PCs y laptops.
-                        Diagnóstico gratuito, atención personalizada y <strong>garantía en todos nuestros servicios.</strong>
+                        Especialistas en <strong>infraestructura cloud</strong>, desarrollo web de alto impacto y automatizaciones con IA.
+                        Impulsamos tu negocio con tecnología de vanguardia y flujos de trabajo inteligentes.
                     </p>
 
                     {/* CTA Buttons */}
@@ -100,32 +100,32 @@ export default function Hero() {
                                 <span className="terminal-title">techrevive ~ diagnóstico</span>
                             </div>
                             <div className="terminal-body">
-                                <div><span className="t-green">$</span> <span className="t-blue">iniciar_diagnóstico</span> <span className="t-white">--equipo=laptop</span></div>
-                                <div className="t-gray">── Conectando con sistema... ✔</div>
-                                <div className="t-gray">── Escaneando hardware...</div>
+                                <div><span className="t-green">$</span> <span className="t-blue">n8n</span> <span className="t-white">--deploy-workflow</span> <span className="t-yellow">"AI-Agent"</span></div>
+                                <div className="t-gray">── Conectando con API OpenAI... ✔</div>
+                                <div className="t-gray">── Configurando nodos de automatización...</div>
                                 <div style={{ marginTop: 8 }}>
-                                    <span className="t-yellow">CPU:</span> <span className="t-white">Intel Core i5 · 85°C ⚠️</span>
+                                    <span className="t-yellow">Cloud:</span> <span className="t-white">AWS Lambda · Active ✔</span>
                                 </div>
                                 <div>
-                                    <span className="t-yellow">RAM:</span> <span className="t-white">8 GB DDR4 · OK ✔</span>
+                                    <span className="t-yellow">DB:</span> <span className="t-white">MongoDB Atlas · Connected ✔</span>
                                 </div>
                                 <div>
-                                    <span className="t-yellow">SSD:</span> <span className="t-white">256 GB · Health 62% ⚠️</span>
+                                    <span className="t-yellow">SSL:</span> <span className="t-white">Certificate · Renewed ✔</span>
                                 </div>
                                 <div>
-                                    <span className="t-yellow">GPU:</span> <span className="t-white">NVIDIA RTX 3060 · OK ✔</span>
+                                    <span className="t-yellow">AI:</span> <span className="t-white">GPT-4 Omni · Integrated ✔</span>
                                 </div>
                                 <div style={{ marginTop: 8 }}>
-                                    <span className="t-green">✔ Diagnóstico completo.</span>
+                                    <span className="t-green">✔ Despliegue exitoso en producción.</span>
                                 </div>
                                 <div style={{ marginTop: 4 }}>
-                                    <span className="t-blue">→ Recomendación:</span> <span className="t-white">Limpieza térmica + pasta</span>
+                                    <span className="t-blue">→ Estado:</span> <span className="t-white">Optimización continua activa</span>
                                 </div>
                                 <div>
-                                    <span className="t-blue">→ Tiempo estimado:</span> <span className="t-white">2 horas</span>
+                                    <span className="t-blue">→ Hosting:</span> <span className="t-white">Global Edge Network</span>
                                 </div>
                                 <div>
-                                    <span className="t-blue">→ Costo:</span> <span className="t-green">Bs. 25 – 40</span>
+                                    <span className="t-blue">→ Latencia:</span> <span className="t-green">&lt; 20ms</span>
                                 </div>
                                 <div style={{ marginTop: 8 }}>
                                     <span className="t-green">$</span> <span className="blink-cursor t-blue">|</span>
@@ -136,9 +136,9 @@ export default function Hero() {
                         {/* Floating stat chips */}
                         <div className="stat-chips">
                             {[
-                                { n: '+500', label: 'Equipos reparados' },
-                                { n: '98%', label: 'Satisfacción' },
-                                { n: '5★', label: 'Calificación' },
+                                { n: '+120', label: 'Nodos Desplegados' },
+                                { n: '99.9%', label: 'Uptime Cloud' },
+                                { n: '24/7', label: 'Soporte Hosting' },
                             ].map(s => (
                                 <div key={s.n} className="stat-chip">
                                     <div className="stat-num">{s.n}</div>
