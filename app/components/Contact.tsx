@@ -43,7 +43,7 @@ export default function Contact() {
         {
             id: 'contact-phone',
             icon: (
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--electric-blue)" strokeWidth="2">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00a8ff" strokeWidth="2">
                     <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.7A2 2 0 012 .1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z" />
                 </svg>
             ),
@@ -51,7 +51,7 @@ export default function Contact() {
             value: '+58 212-000-0000',
             sub: 'Lun–Sáb 8am – 7pm',
             href: 'tel:+582120000000',
-            color: 'var(--electric-blue)',
+            color: '#00a8ff',
         },
         {
             id: 'contact-email',
@@ -108,92 +108,63 @@ export default function Contact() {
     ];
 
     return (
-        <section id="contacto" className="section-padding" style={{
-            background: 'var(--bg-secondary)', position: 'relative', overflow: 'hidden'
-        }}>
+        <section id="contacto" className="contact-section">
             {/* Background */}
-            <div className="bg-grid" style={{ position: 'absolute', inset: 0, opacity: 0.4 }} />
-            <div className="orb orb-blue" style={{ width: 600, height: 600, bottom: '-20%', right: '-10%', opacity: 0.5 }} />
+            <div className="bg-grid"></div>
+            <div className="orb orb-blue"></div>
 
-            <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1 }}>
+            <div className="container">
                 {/* Header */}
-                <div style={{ textAlign: 'center', marginBottom: 64 }}>
-                    <div className="section-label" style={{ justifyContent: 'center' }}>Contacto</div>
-                    <h2 className="section-title" style={{ textAlign: 'center' }}>
+                <div className="header">
+                    <div className="section-label">Contacto</div>
+                    <h2 className="section-title">
                         ¿Tu equipo tiene{' '}
                         <span className="text-gradient">problemas?</span>
                     </h2>
-                    <p className="section-subtitle" style={{ margin: '0 auto', textAlign: 'center' }}>
+                    <p className="section-subtitle">
                         Estamos aquí para ayudarte. Contáctanos por cualquier canal y te
                         respondemos de inmediato.
                     </p>
                 </div>
 
-                <div style={{
-                    display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: 48, alignItems: 'start'
-                }}>
+                <div className="contact-grid">
                     {/* Left: Contact info */}
-                    <div>
+                    <div className="contact-info">
                         {/* CTA destacado */}
                         <a href="https://wa.me/58412000000?text=Hola%2C+necesito+soporte+técnico"
                             target="_blank" rel="noopener noreferrer"
-                            id="contact-main-whatsapp"
-                            style={{
-                                display: 'flex', alignItems: 'center', gap: 16,
-                                padding: '20px 24px', marginBottom: 24,
-                                background: 'linear-gradient(135deg, rgba(37,211,102,0.15), rgba(18,140,126,0.08))',
-                                border: '1.5px solid rgba(37,211,102,0.4)',
-                                borderRadius: 16, textDecoration: 'none',
-                                transition: 'all 0.3s',
-                            }}>
-                            <div style={{
-                                width: 52, height: 52, borderRadius: 12, flexShrink: 0,
-                                background: 'rgba(37,211,102,0.15)',
-                                display: 'flex', alignItems: 'center', justifyContent: 'center'
-                            }}>
+                            className="whatsapp-cta">
+                            <div className="whatsapp-icon-box">
                                 <svg width="28" height="28" viewBox="0 0 24 24" fill="#25D366">
                                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                                 </svg>
                             </div>
                             <div>
-                                <div style={{ fontSize: 15, fontWeight: 700, color: '#25D366', marginBottom: 2 }}>
-                                    Chat en WhatsApp →
-                                </div>
-                                <div style={{ fontSize: 13, color: 'var(--text-muted)' }}>
-                                    Respuesta inmediata · Lun–Sáb 8am–7pm
-                                </div>
+                                <div className="whatsapp-label">Chat en WhatsApp →</div>
+                                <div className="whatsapp-sub">Respuesta inmediata · Lun–Sáb 8am–7pm</div>
                             </div>
                         </a>
 
-                        {/* Contact items */}
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 32 }}>
+                        <div className="contact-items">
                             {contactItems.map(ci => (
-                                <a key={ci.id} id={ci.id} href={ci.href} target="_blank" rel="noopener noreferrer"
-                                    className="contact-info-card" style={{ textDecoration: 'none' }}>
-                                    <div style={{
-                                        width: 44, height: 44, borderRadius: 10, flexShrink: 0,
-                                        background: `${ci.color}11`,
-                                        border: `1px solid ${ci.color}2d`,
-                                        display: 'flex', alignItems: 'center', justifyContent: 'center'
-                                    }}>
+                                <a key={ci.id} href={ci.href} target="_blank" rel="noopener noreferrer" className="contact-card">
+                                    <div className="contact-icon" style={{ background: `${ci.color}11`, borderColor: `${ci.color}2d` }}>
                                         {ci.icon}
                                     </div>
                                     <div>
-                                        <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 2, fontWeight: 500, textTransform: 'uppercase', letterSpacing: 1 }}>{ci.label}</div>
-                                        <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 2 }}>{ci.value}</div>
-                                        <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>{ci.sub}</div>
+                                        <div className="item-label">{ci.label}</div>
+                                        <div className="item-value">{ci.value}</div>
+                                        <div className="item-sub">{ci.sub}</div>
                                     </div>
                                 </a>
                             ))}
                         </div>
 
-                        {/* Social Networks */}
-                        <div>
-                            <p style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 14, textTransform: 'uppercase', letterSpacing: 1.5, fontWeight: 600 }}>Síguenos</p>
-                            <div style={{ display: 'flex', gap: 10 }}>
+                        <div className="socials-wrap">
+                            <p className="socials-title">Síguenos</p>
+                            <div className="social-icons">
                                 {socials.map(s => (
-                                    <a key={s.id} id={s.id} href={s.href} target="_blank" rel="noopener noreferrer"
-                                        className="social-icon" title={s.label} aria-label={s.label}>
+                                    <a key={s.id} href={s.href} target="_blank" rel="noopener noreferrer" className="social-icon">
                                         {s.icon}
                                     </a>
                                 ))}
@@ -202,73 +173,41 @@ export default function Contact() {
                     </div>
 
                     {/* Right: Form */}
-                    <div style={{
-                        padding: '40px 36px',
-                        background: 'var(--glass-bg)',
-                        border: '1px solid var(--border-subtle)',
-                        borderRadius: 24,
-                        backdropFilter: 'blur(16px)'
-                    }}>
+                    <div className="form-container">
                         {sent ? (
-                            <div style={{ textAlign: 'center', padding: '40px 0' }}>
-                                <div style={{ fontSize: 64, marginBottom: 16 }}>✅</div>
-                                <h3 className="font-display" style={{ fontSize: 22, color: 'var(--text-primary)', marginBottom: 12 }}>
-                                    ¡Mensaje enviado!
-                                </h3>
-                                <p style={{ color: 'var(--text-secondary)', marginBottom: 24 }}>
-                                    Te hemos redirigido a WhatsApp. Responderemos a la brevedad.
-                                </p>
-                                <button onClick={() => setSent(false)} className="btn-secondary"
-                                    style={{ cursor: 'pointer' }}>
+                            <div className="success-message">
+                                <div className="success-icon">✅</div>
+                                <h3>¡Mensaje enviado!</h3>
+                                <p>Te hemos redirigido a WhatsApp. Responderemos a la brevedad.</p>
+                                <button onClick={() => setSent(false)} className="btn-secondary">
                                     Enviar otro mensaje
                                 </button>
                             </div>
                         ) : (
                             <>
-                                <h3 className="font-display" style={{
-                                    fontSize: 20, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 6
-                                }}>Envíanos un mensaje</h3>
-                                <p style={{ fontSize: 14, color: 'var(--text-muted)', marginBottom: 28 }}>
-                                    Completa el formulario y te contactamos vía WhatsApp al instante.
-                                </p>
+                                <h3>Envíanos un mensaje</h3>
+                                <p className="form-desc">Completa el formulario y te contactamos vía WhatsApp al instante.</p>
 
-                                <form onSubmit={handleSubmit}
-                                    style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-                                        <div>
-                                            <label style={{ fontSize: 12, color: 'var(--text-muted)', display: 'block', marginBottom: 6, fontWeight: 500 }}>
-                                                Nombre *
-                                            </label>
-                                            <input id="form-name" name="name" type="text" required
-                                                placeholder="Tu nombre"
-                                                className="input-field" value={formData.name} onChange={handleChange} />
+                                <form onSubmit={handleSubmit}>
+                                    <div className="form-row">
+                                        <div className="form-group">
+                                            <label>Nombre *</label>
+                                            <input name="name" type="text" required placeholder="Tu nombre" value={formData.name} onChange={handleChange} />
                                         </div>
-                                        <div>
-                                            <label style={{ fontSize: 12, color: 'var(--text-muted)', display: 'block', marginBottom: 6, fontWeight: 500 }}>
-                                                Teléfono
-                                            </label>
-                                            <input id="form-phone" name="phone" type="tel"
-                                                placeholder="+58 412-..."
-                                                className="input-field" value={formData.phone} onChange={handleChange} />
+                                        <div className="form-group">
+                                            <label>Teléfono</label>
+                                            <input name="phone" type="tel" placeholder="+58 412-..." value={formData.phone} onChange={handleChange} />
                                         </div>
                                     </div>
 
-                                    <div>
-                                        <label style={{ fontSize: 12, color: 'var(--text-muted)', display: 'block', marginBottom: 6, fontWeight: 500 }}>
-                                            Correo electrónico
-                                        </label>
-                                        <input id="form-email" name="email" type="email"
-                                            placeholder="tu@email.com"
-                                            className="input-field" value={formData.email} onChange={handleChange} />
+                                    <div className="form-group">
+                                        <label>Correo electrónico</label>
+                                        <input name="email" type="email" placeholder="tu@email.com" value={formData.email} onChange={handleChange} />
                                     </div>
 
-                                    <div>
-                                        <label style={{ fontSize: 12, color: 'var(--text-muted)', display: 'block', marginBottom: 6, fontWeight: 500 }}>
-                                            Servicio de interés *
-                                        </label>
-                                        <select id="form-service" name="service" required
-                                            className="input-field" value={formData.service} onChange={handleChange}
-                                            style={{ cursor: 'pointer' }}>
+                                    <div className="form-group">
+                                        <label>Servicio de interés *</label>
+                                        <select name="service" required value={formData.service} onChange={handleChange}>
                                             <option value="" disabled>Selecciona un servicio…</option>
                                             <option value="Reparación de PC o Laptop">Reparación de PC o Laptop</option>
                                             <option value="Mantenimiento preventivo/correctivo">Mantenimiento preventivo/correctivo</option>
@@ -279,17 +218,12 @@ export default function Contact() {
                                         </select>
                                     </div>
 
-                                    <div>
-                                        <label style={{ fontSize: 12, color: 'var(--text-muted)', display: 'block', marginBottom: 6, fontWeight: 500 }}>
-                                            Describe tu problema *
-                                        </label>
-                                        <textarea id="form-message" name="message" required
-                                            placeholder="Cuéntanos qué le pasa a tu equipo…"
-                                            className="input-field" value={formData.message} onChange={handleChange} />
+                                    <div className="form-group">
+                                        <label>Describe tu problema *</label>
+                                        <textarea name="message" required placeholder="Cuéntanos qué le pasa a tu equipo…" value={formData.message} onChange={handleChange} />
                                     </div>
 
-                                    <button type="submit" id="form-submit-btn" className="btn-primary"
-                                        style={{ justifyContent: 'center', width: '100%', marginTop: 4 }}>
+                                    <button type="submit" className="submit-btn">
                                         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                                             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                                         </svg>
@@ -301,6 +235,348 @@ export default function Contact() {
                     </div>
                 </div>
             </div>
+
+            <style jsx>{`
+                .contact-section {
+                    background: #0a0f1e;
+                    position: relative;
+                    overflow: hidden;
+                    padding: 100px 0;
+                    font-family: 'Inter', sans-serif;
+                }
+
+                .bg-grid {
+                    position: absolute;
+                    inset: 0;
+                    background-image: linear-gradient(rgba(0, 168, 255, 0.05) 1px, transparent 1px),
+                                    linear-gradient(90deg, rgba(0, 168, 255, 0.05) 1px, transparent 1px);
+                    background-size: 40px 40px;
+                    opacity: 0.4;
+                }
+
+                .orb {
+                    position: absolute;
+                    border-radius: 50%;
+                    filter: blur(80px);
+                    pointer-events: none;
+                }
+
+                .orb-blue {
+                    width: 600px;
+                    height: 600px;
+                    background: radial-gradient(circle, rgba(0, 168, 255, 0.2) 0%, transparent 70%);
+                    bottom: -20%;
+                    right: -10%;
+                    opacity: 0.5;
+                }
+
+                .container {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    padding: 0 24px;
+                    position: relative;
+                    z-index: 1;
+                }
+
+                .header {
+                    text-align: center;
+                    margin-bottom: 64px;
+                }
+
+                .section-label {
+                    display: inline-flex;
+                    padding: 6px 16px;
+                    background: rgba(0, 168, 255, 0.1);
+                    border: 1px solid rgba(0, 168, 255, 0.2);
+                    border-radius: 40px;
+                    color: #00a8ff;
+                    font-size: 13px;
+                    font-weight: 700;
+                    letter-spacing: 0.05em;
+                    text-transform: uppercase;
+                    margin-bottom: 20px;
+                }
+
+                .section-title {
+                    font-family: 'Orbitron', sans-serif;
+                    font-size: clamp(32px, 4vw, 48px);
+                    font-weight: 800;
+                    color: #f0f4ff;
+                }
+
+                .text-gradient {
+                    background: linear-gradient(135deg, #00a8ff 0%, #00ff88 100%);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                }
+
+                .section-subtitle {
+                    font-size: 16px;
+                    color: #8899bb;
+                    max-width: 600px;
+                    margin: 20px auto 0;
+                    line-height: 1.6;
+                }
+
+                .contact-grid {
+                    display: grid;
+                    grid-template-columns: 1fr 1.4fr;
+                    gap: 48px;
+                    align-items: start;
+                }
+
+                .whatsapp-cta {
+                    display: flex;
+                    align-items: center;
+                    gap: 16px;
+                    padding: 20px 24px;
+                    margin-bottom: 24px;
+                    background: rgba(37, 211, 102, 0.1);
+                    border: 1.5px solid rgba(37, 211, 102, 0.4);
+                    border-radius: 16px;
+                    text-decoration: none;
+                    transition: all 0.3s;
+                }
+
+                .whatsapp-cta:hover {
+                    background: rgba(37, 211, 102, 0.15);
+                    transform: translateY(-2px);
+                }
+
+                .whatsapp-icon-box {
+                    width: 52px;
+                    height: 52px;
+                    border-radius: 12px;
+                    flex-shrink: 0;
+                    background: rgba(37, 211, 102, 0.1);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .whatsapp-label {
+                    font-size: 15px;
+                    font-weight: 700;
+                    color: #25D366;
+                    margin-bottom: 2px;
+                }
+
+                .whatsapp-sub {
+                    font-size: 13px;
+                    color: #4a5568;
+                }
+
+                .contact-items {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 12px;
+                    margin-bottom: 32px;
+                }
+
+                .contact-card {
+                    display: flex;
+                    gap: 16px;
+                    align-items: center;
+                    padding: 16px;
+                    background: rgba(13, 21, 38, 0.4);
+                    border: 1px solid rgba(255, 255, 255, 0.05);
+                    border-radius: 14px;
+                    text-decoration: none;
+                    transition: all 0.3s;
+                }
+
+                .contact-card:hover {
+                    background: rgba(13, 21, 38, 0.7);
+                    transform: translateX(5px);
+                }
+
+                .contact-icon {
+                    width: 44px;
+                    height: 44px;
+                    border-radius: 10px;
+                    flex-shrink: 0;
+                    border: 1px solid;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .item-label {
+                    font-size: 11px;
+                    color: #4a5568;
+                    margin-bottom: 2px;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                }
+
+                .item-value {
+                    font-size: 14px;
+                    font-weight: 600;
+                    color: #f0f4ff;
+                    margin-bottom: 2px;
+                }
+
+                .item-sub {
+                    font-size: 12px;
+                    color: #4a5568;
+                }
+
+                .socials-wrap {
+                    margin-top: 32px;
+                }
+
+                .socials-title {
+                    font-size: 12px;
+                    color: #4a5568;
+                    margin-bottom: 14px;
+                    text-transform: uppercase;
+                    letter-spacing: 1.5px;
+                    font-weight: 600;
+                }
+
+                .social-icons {
+                    display: flex;
+                    gap: 10px;
+                }
+
+                .social-icon {
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                    background: rgba(13, 21, 38, 0.6);
+                    border: 1px solid rgba(255, 255, 255, 0.05);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: #8899bb;
+                    transition: all 0.3s;
+                }
+
+                .social-icon:hover {
+                    background: #00a8ff;
+                    color: white;
+                    transform: translateY(-3px);
+                }
+
+                .form-container {
+                    padding: 40px 36px;
+                    background: rgba(13, 21, 38, 0.6);
+                    backdrop-filter: blur(16px);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    border-radius: 24px;
+                }
+
+                .success-message {
+                    text-align: center;
+                    padding: 40px 0;
+                }
+
+                .success-icon {
+                    font-size: 64px;
+                    margin-bottom: 16px;
+                }
+
+                .btn-secondary {
+                    padding: 12px 24px;
+                    background: transparent;
+                    color: #00a8ff;
+                    border: 1.5px solid #00a8ff;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    font-weight: 600;
+                    transition: all 0.3s;
+                }
+
+                .btn-secondary:hover {
+                    background: rgba(0, 168, 255, 0.1);
+                }
+
+                .form-desc {
+                    font-size: 14px;
+                    color: #4a5568;
+                    margin-bottom: 28px;
+                }
+
+                .form-row {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 14px;
+                    margin-bottom: 16px;
+                }
+
+                .form-group {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 6px;
+                    margin-bottom: 16px;
+                }
+
+                label {
+                    font-size: 12px;
+                    color: #4a5568;
+                    font-weight: 500;
+                }
+
+                input, select, textarea {
+                    background: rgba(5, 8, 16, 0.4);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    border-radius: 10px;
+                    padding: 12px;
+                    color: white;
+                    font-size: 14px;
+                    outline: none;
+                    transition: all 0.3s;
+                }
+
+                input:focus, select:focus, textarea:focus {
+                    border-color: #00a8ff;
+                    background: rgba(5, 8, 16, 0.6);
+                }
+
+                textarea {
+                    min-height: 120px;
+                    resize: vertical;
+                }
+
+                .submit-btn {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 12px;
+                    padding: 16px;
+                    background: linear-gradient(135deg, #00a8ff, #0077cc);
+                    color: white;
+                    border: none;
+                    border-radius: 12px;
+                    font-weight: 700;
+                    font-size: 15px;
+                    cursor: pointer;
+                    transition: all 0.3s;
+                    box-shadow: 0 4px 15px rgba(0, 168, 255, 0.3);
+                }
+
+                .submit-btn:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 6px 20px rgba(0, 168, 255, 0.5);
+                }
+
+                @media (max-width: 900px) {
+                    .contact-grid {
+                        grid-template-columns: 1fr;
+                    }
+                }
+
+                @media (max-width: 600px) {
+                    .form-row {
+                        grid-template-columns: 1fr;
+                    }
+                    .form-container {
+                        padding: 30px 20px;
+                    }
+                }
+            `}</style>
         </section>
     );
 }

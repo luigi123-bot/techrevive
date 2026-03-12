@@ -1,5 +1,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { NextRequest, NextResponse } from 'next/server';
+import dbConnect from '@/lib/mongodb';
+import ChatLog from '@/models/ChatLog';
 
 const SYSTEM_INSTRUCTION = `Eres "TechBot", el asistente técnico virtual de TechRevive, un servicio técnico profesional de computadoras en Colombia.
 
@@ -58,6 +60,8 @@ Instrucciones de comportamiento:
 
 export async function POST(req: NextRequest) {
     try {
+        await dbConnect(); // Conexión a MongoDB
+
         const apiKey = process.env.GEMINI_API_KEY;
 
         if (!apiKey || apiKey === 'TU_API_KEY_AQUI') {
@@ -96,9 +100,22 @@ export async function POST(req: NextRequest) {
         const result = await chat.sendMessage(lastMessage.parts[0].text);
         const text = result.response.text();
 
+        // Guardar en MongoDB
+        try {
+            await ChatLog.create({
+                messages: [
+                    ...messages.map(m => ({ role: m.role, content: m.parts[0].text })),
+                    { role: 'model', content: text }
+                ]
+            });
+        } catch (dbError) {
+            console.error('Error saving to MongoDB:', dbError);
+            // No bloqueamos la respuesta del chat si falla el guardado
+        }
+
         return NextResponse.json({ text });
     } catch (error) {
-        console.error('Error calling Gemini:', error);
+        console.error('Error calling Gemini or DB:', error);
         return NextResponse.json(
             { error: 'Error al conectar con el asistente. Intenta de nuevo.' },
             { status: 500 }

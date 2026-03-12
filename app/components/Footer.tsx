@@ -1,3 +1,5 @@
+"use client";
+
 export default function Footer() {
     const year = new Date().getFullYear();
 
@@ -60,52 +62,32 @@ export default function Footer() {
     ];
 
     return (
-        <footer style={{
-            background: 'var(--bg-primary)',
-            borderTop: '1px solid var(--border-subtle)',
-            position: 'relative', overflow: 'hidden'
-        }}>
+        <footer className="footer">
             {/* Top glow line */}
-            <div style={{
-                height: 1,
-                background: 'linear-gradient(90deg, transparent, var(--electric-blue), var(--neon-green), var(--electric-blue), transparent)',
-                opacity: 0.4
-            }} />
+            <div className="glow-line"></div>
 
-            <div style={{ maxWidth: 1200, margin: '0 auto', padding: '64px 24px 32px' }}>
+            <div className="container">
                 {/* Main grid */}
-                <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: '2fr 1fr 1fr 1.5fr',
-                    gap: 48, marginBottom: 56
-                }}>
+                <div className="footer-grid">
                     {/* Brand column */}
-                    <div>
+                    <div className="brand-col">
                         {/* Logo */}
-                        <a href="#" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
-                            <div style={{
-                                width: 36, height: 36, borderRadius: 8,
-                                background: 'linear-gradient(135deg, #00a8ff, #0055aa)',
-                                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18,
-                                boxShadow: '0 0 16px rgba(0,168,255,0.4)'
-                            }}>⚡</div>
-                            <span className="font-display" style={{ fontSize: 18, fontWeight: 700, color: '#f0f4ff', letterSpacing: 1 }}>
-                                TECH<span style={{ color: 'var(--electric-blue)' }}>REVIVE</span>
+                        <a href="#" className="logo">
+                            <div className="logo-badge">⚡</div>
+                            <span className="logo-text">
+                                TECH<span className="accent">REVIVE</span>
                             </span>
                         </a>
 
-                        <p style={{
-                            fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.75, marginBottom: 24, maxWidth: 280
-                        }}>
+                        <p className="brand-desc">
                             Tu aliado tecnológico de confianza. Reparación, mantenimiento y potenciación
                             de tus equipos con garantía y profesionalismo.
                         </p>
 
                         {/* Social icons */}
-                        <div style={{ display: 'flex', gap: 10 }}>
+                        <div className="social-icons">
                             {socials.map(s => (
-                                <a key={s.id} id={s.id} href={s.href} target="_blank"
-                                    rel="noopener noreferrer" className="social-icon" title={s.label}>
+                                <a key={s.id} href={s.href} target="_blank" rel="noopener noreferrer" className="social-icon">
                                     {s.icon}
                                 </a>
                             ))}
@@ -113,87 +95,281 @@ export default function Footer() {
                     </div>
 
                     {/* Services links */}
-                    <div>
-                        <h4 style={{
-                            fontSize: 13, fontWeight: 700, color: 'var(--text-primary)',
-                            letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 20
-                        }}>Servicios</h4>
-                        {services.map(s => (
-                            <a key={s.label} href={s.href} className="footer-link">{s.label}</a>
-                        ))}
+                    <div className="links-col">
+                        <h4>Servicios</h4>
+                        <div className="links-list">
+                            {services.map(s => (
+                                <a key={s.label} href={s.href} className="footer-link">{s.label}</a>
+                            ))}
+                        </div>
                     </div>
 
                     {/* Info links */}
-                    <div>
-                        <h4 style={{
-                            fontSize: 13, fontWeight: 700, color: 'var(--text-primary)',
-                            letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 20
-                        }}>Empresa</h4>
-                        {info.map(i => (
-                            <a key={i.label} href={i.href} className="footer-link">{i.label}</a>
-                        ))}
+                    <div className="links-col">
+                        <h4>Empresa</h4>
+                        <div className="links-list">
+                            {info.map(i => (
+                                <a key={i.label} href={i.href} className="footer-link">{i.label}</a>
+                            ))}
+                        </div>
                     </div>
 
                     {/* Contact info */}
-                    <div>
-                        <h4 style={{
-                            fontSize: 13, fontWeight: 700, color: 'var(--text-primary)',
-                            letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 20
-                        }}>Contacto</h4>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-                            <a href="https://wa.me/58412000000" style={{ textDecoration: 'none' }}
-                                target="_blank" rel="noopener noreferrer">
-                                <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 2, letterSpacing: 0.5 }}>WHATSAPP</div>
-                                <div style={{ fontSize: 14, color: '#25D366', fontWeight: 600 }}>+58 412-000-0000</div>
+                    <div className="contact-col">
+                        <h4>Contacto</h4>
+                        <div className="contact-info-list">
+                            <a href="https://wa.me/58412000000" target="_blank" rel="noopener noreferrer" className="whatsapp-link">
+                                <div className="contact-label">WHATSAPP</div>
+                                <div className="whatsapp-val">+58 412-000-0000</div>
                             </a>
-                            <div>
-                                <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 2, letterSpacing: 0.5 }}>TELÉFONO</div>
-                                <div style={{ fontSize: 14, color: 'var(--text-secondary)', fontWeight: 500 }}>+58 212-000-0000</div>
+                            <div className="contact-item">
+                                <div className="contact-label">TELÉFONO</div>
+                                <div className="contact-val">+58 212-000-0000</div>
                             </div>
-                            <div>
-                                <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 2, letterSpacing: 0.5 }}>EMAIL</div>
-                                <div style={{ fontSize: 14, color: 'var(--text-secondary)', fontWeight: 500 }}>info@techrevive.com</div>
+                            <div className="contact-item">
+                                <div className="contact-label">EMAIL</div>
+                                <div className="contact-val">info@techrevive.com</div>
                             </div>
-                            <div>
-                                <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 2, letterSpacing: 0.5 }}>HORARIO</div>
-                                <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>Lunes – Sábado</div>
-                                <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>8:00 AM – 7:00 PM</div>
-                            </div>
-                            <div>
-                                <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 2, letterSpacing: 0.5 }}>DIRECCIÓN</div>
-                                <div style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.55 }}>
-                                    Av. Tecnología, Local 12<br />Caracas, Venezuela
-                                </div>
+                            <div className="contact-item">
+                                <div className="contact-label">HORARIO</div>
+                                <div className="contact-val">Lunes – Sábado</div>
+                                <div className="contact-val">8:00 AM – 7:00 PM</div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 {/* Bottom bar */}
-                <div style={{
-                    borderTop: '1px solid var(--border-subtle)',
-                    paddingTop: 28,
-                    display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                    flexWrap: 'wrap', gap: 16
-                }}>
-                    <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>
-                        © {year} <span style={{ color: 'var(--electric-blue)' }}>TechRevive</span>. Todos los derechos reservados.
+                <div className="bottom-bar">
+                    <p className="copyright">
+                        © {year} <span className="accent">TechRevive</span>. Todos los derechos reservados.
                     </p>
-                    <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
-                        <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>Hecho con</span>
-                        <span style={{ color: 'var(--accent-red)' }}>♥</span>
-                        <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>para tus equipos</span>
+                    <div className="made-with">
+                        <span>Hecho con</span>
+                        <span className="heart">♥</span>
+                        <span>para tus equipos</span>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                        <div style={{
-                            width: 8, height: 8, borderRadius: '50%',
-                            background: 'var(--neon-green)',
-                            boxShadow: '0 0 6px var(--neon-green)'
-                        }} />
-                        <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>Servicio disponible ahora</span>
+                    <div className="status">
+                        <div className="status-dot"></div>
+                        <span>Servicio disponible ahora</span>
                     </div>
                 </div>
             </div>
+
+            <style jsx>{`
+                .footer {
+                    background: #050810;
+                    border-top: 1px solid rgba(255, 255, 255, 0.05);
+                    position: relative;
+                    overflow: hidden;
+                    font-family: 'Inter', sans-serif;
+                }
+
+                .glow-line {
+                    height: 1px;
+                    background: linear-gradient(90deg, transparent, #00a8ff, #00ff88, #00a8ff, transparent);
+                    opacity: 0.4;
+                }
+
+                .container {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    padding: 64px 24px 32px;
+                }
+
+                .footer-grid {
+                    display: grid;
+                    grid-template-columns: 2fr 1fr 1fr 1.5fr;
+                    gap: 48px;
+                    margin-bottom: 56px;
+                }
+
+                .brand-col {
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                .logo {
+                    text-decoration: none;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 10px;
+                    margin-bottom: 20px;
+                }
+
+                .logo-badge {
+                    width: 36px;
+                    height: 36px;
+                    border-radius: 8px;
+                    background: linear-gradient(135deg, #00a8ff, #0055aa);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 18px;
+                    color: white;
+                    box-shadow: 0 0 16px rgba(0,168,255,0.4);
+                }
+
+                .logo-text {
+                    font-family: 'Orbitron', sans-serif;
+                    font-size: 18px;
+                    font-weight: 700;
+                    color: #f0f4ff;
+                    letter-spacing: 1px;
+                }
+
+                .accent {
+                    color: #00a8ff;
+                }
+
+                .brand-desc {
+                    font-size: 14px;
+                    color: #4a5568;
+                    line-height: 1.75;
+                    margin-bottom: 24px;
+                    max-width: 280px;
+                }
+
+                .social-icons {
+                    display: flex;
+                    gap: 10px;
+                }
+
+                .social-icon {
+                    width: 36px;
+                    height: 36px;
+                    border-radius: 50%;
+                    background: rgba(255, 255, 255, 0.03);
+                    border: 1px solid rgba(255, 255, 255, 0.05);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: #4a5568;
+                    transition: all 0.3s;
+                }
+
+                .social-icon:hover {
+                    background: #00a8ff;
+                    color: white;
+                    transform: translateY(-3px);
+                }
+
+                .links-col h4, .contact-col h4 {
+                    font-size: 13px;
+                    font-weight: 700;
+                    color: #f0f4ff;
+                    letter-spacing: 1.5px;
+                    text-transform: uppercase;
+                    margin-bottom: 20px;
+                }
+
+                .links-list {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 12px;
+                }
+
+                .footer-link {
+                    color: #4a5568;
+                    text-decoration: none;
+                    font-size: 14px;
+                    transition: all 0.2s;
+                }
+
+                .footer-link:hover {
+                    color: #00a8ff;
+                }
+
+                .contact-info-list {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 14px;
+                }
+
+                .contact-label {
+                    font-size: 11px;
+                    color: #4a5568;
+                    margin-bottom: 2px;
+                    letter-spacing: 0.5px;
+                    font-weight: 600;
+                }
+
+                .whatsapp-link {
+                    text-decoration: none;
+                }
+
+                .whatsapp-val {
+                    font-size: 14px;
+                    color: #25D366;
+                    font-weight: 600;
+                }
+
+                .contact-val {
+                    font-size: 14px;
+                    color: #8899bb;
+                    font-weight: 500;
+                }
+
+                .bottom-bar {
+                    border-top: 1px solid rgba(255, 255, 255, 0.05);
+                    padding-top: 28px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    flex-wrap: wrap;
+                    gap: 16px;
+                }
+
+                .copyright {
+                    font-size: 13px;
+                    color: #4a5568;
+                }
+
+                .made-with {
+                    display: flex;
+                    gap: 4px;
+                    align-items: center;
+                    font-size: 12px;
+                    color: #4a5568;
+                }
+
+                .heart {
+                    color: #ff3366;
+                }
+
+                .status {
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    font-size: 12px;
+                    color: #4a5568;
+                }
+
+                .status-dot {
+                    width: 8px;
+                    height: 8px;
+                    border-radius: 50%;
+                    background: #00ff88;
+                    box-shadow: 0 0 6px #00ff88;
+                }
+
+                @media (max-width: 900px) {
+                    .footer-grid {
+                        grid-template-columns: 1fr 1fr;
+                        gap: 40px;
+                    }
+                }
+
+                @media (max-width: 480px) {
+                    .footer-grid {
+                        grid-template-columns: 1fr;
+                    }
+                    .bottom-bar {
+                        justify-content: center;
+                        text-align: center;
+                    }
+                }
+            `}</style>
         </footer>
     );
 }

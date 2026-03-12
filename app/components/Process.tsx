@@ -1,3 +1,5 @@
+"use client";
+
 export default function Process() {
     const steps = [
         {
@@ -48,119 +50,265 @@ export default function Process() {
     ];
 
     return (
-        <section id="proceso" className="section-padding" style={{
-            background: 'var(--bg-secondary)', position: 'relative', overflow: 'hidden'
-        }}>
-            {/* Background decoration */}
-            <div className="bg-grid" style={{ position: 'absolute', inset: 0, opacity: 0.4 }} />
-            <div className="orb orb-purple" style={{ width: 600, height: 600, bottom: '-20%', left: '-10%' }} />
+        <section id="proceso" className="process-section">
+            <div className="bg-grid"></div>
+            <div className="orb orb-purple"></div>
 
-            <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1 }}>
-                {/* Header */}
-                <div style={{ textAlign: 'center', marginBottom: 72 }}>
-                    <div className="section-label" style={{ justifyContent: 'center' }}>Proceso de Trabajo</div>
-                    <h2 className="section-title" style={{ textAlign: 'center' }}>
+            <div className="container">
+                <div className="header">
+                    <div className="section-label">Proceso de Trabajo</div>
+                    <h2 className="section-title">
                         Simple, transparente y{' '}
                         <span className="text-gradient">sin sorpresas</span>
                     </h2>
-                    <p className="section-subtitle" style={{ margin: '0 auto', textAlign: 'center' }}>
+                    <p className="section-subtitle">
                         Seguimos un proceso probado de 5 pasos para garantizar la mejor
                         experiencia desde que nos contactas hasta la entrega de tu equipo.
                     </p>
                 </div>
 
-                {/* Steps — alternating layout */}
-                <div style={{ position: 'relative' }}>
-                    {/* Vertical connector line */}
-                    <div style={{
-                        position: 'absolute',
-                        left: '50%', top: 0, bottom: 0,
-                        width: 1,
-                        background: 'linear-gradient(180deg, transparent, rgba(0,168,255,0.2) 10%, rgba(0,168,255,0.2) 90%, transparent)',
-                        transform: 'translateX(-50%)',
-                        zIndex: 0
-                    }} className="hidden md:block" />
+                <div className="timeline-container">
+                    <div className="vertical-line hidden md:block"></div>
 
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 48 }}>
+                    <div className="desktop-steps hidden md:flex">
                         {steps.map((s, i) => {
                             const isEven = i % 2 === 0;
                             return (
-                                <div key={s.id} id={s.id} style={{
-                                    display: 'grid',
-                                    gridTemplateColumns: '1fr auto 1fr',
-                                    gap: 32,
-                                    alignItems: 'center',
-                                    position: 'relative', zIndex: 1
-                                }}>
-                                    {/* Left content (even steps) */}
-                                    <div style={{
-                                        display: isEven ? 'block' : 'none',
-                                        textAlign: 'right'
-                                    }} className="hidden md:block">
-                                        {isEven && (
-                                            <StepContent step={s} reverse />
-                                        )}
+                                <div key={s.id} className="step-row">
+                                    <div className="step-content-cell left">
+                                        {isEven && <StepContent step={s} reverse />}
                                     </div>
-
-                                    {/* Center dot */}
-                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0 }}>
-                                        <div style={{
-                                            width: 64, height: 64, borderRadius: '50%',
+                                    <div className="step-dot-cell">
+                                        <div className="dot" style={{
                                             background: `radial-gradient(circle, ${s.color}22 0%, ${s.color}08 70%)`,
                                             border: `2px solid ${s.color}55`,
-                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                            fontSize: 24,
                                             boxShadow: `0 0 20px ${s.color}33`,
-                                            flexShrink: 0
                                         }}>
                                             {s.icon}
                                         </div>
                                     </div>
-
-                                    {/* Right content (odd steps) */}
-                                    <div style={{
-                                        display: isEven ? 'none' : 'block'
-                                    }} className="hidden md:block">
-                                        {!isEven && (
-                                            <StepContent step={s} />
-                                        )}
-                                    </div>
-
-                                    {/* Mobile: always show full width */}
-                                    <div className="md:hidden" style={{ display: 'none' }}>
-                                        <StepContent step={s} />
+                                    <div className="step-content-cell right">
+                                        {!isEven && <StepContent step={s} />}
                                     </div>
                                 </div>
                             );
                         })}
                     </div>
 
-                    {/* Mobile view: simple list */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }} className="md:hidden">
+                    <div className="mobile-steps md:hidden">
                         {steps.map((s) => (
-                            <div key={`m-${s.id}`} style={{
-                                display: 'flex', gap: 20, alignItems: 'flex-start',
-                                padding: '24px 20px',
-                                background: 'var(--glass-bg)',
-                                border: '1px solid var(--border-subtle)',
-                                borderRadius: 16
-                            }}>
-                                <div style={{
-                                    width: 50, height: 50, borderRadius: '50%', flexShrink: 0,
-                                    background: `${s.color}11`, border: `1.5px solid ${s.color}44`,
-                                    display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22
-                                }}>{s.icon}</div>
+                            <div key={`m-${s.id}`} className="mobile-card">
+                                <div className="mobile-icon" style={{ background: `${s.color}11`, border: `1.5px solid ${s.color}44` }}>
+                                    {s.icon}
+                                </div>
                                 <div>
-                                    <span className="font-display" style={{ fontSize: 11, color: s.color, letterSpacing: 1 }}>{s.num}</span>
-                                    <h3 style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-primary)', margin: '4px 0 8px' }}>{s.title}</h3>
-                                    <p style={{ fontSize: 13.5, color: 'var(--text-secondary)', lineHeight: 1.65 }}>{s.desc}</p>
-                                    <span style={{ fontSize: 11.5, color: s.color, fontWeight: 600, display: 'block', marginTop: 8 }}>→ {s.detail}</span>
+                                    <span className="step-num" style={{ color: s.color }}>{s.num}</span>
+                                    <h3 className="mobile-title">{s.title}</h3>
+                                    <p className="mobile-desc">{s.desc}</p>
+                                    <span className="mobile-detail" style={{ color: s.color }}>→ {s.detail}</span>
                                 </div>
                             </div>
                         ))}
                     </div>
                 </div>
             </div>
+
+            <style jsx>{`
+                .process-section {
+                    background: #0a0f1e;
+                    position: relative;
+                    overflow: hidden;
+                    padding: 100px 0;
+                    font-family: 'Inter', sans-serif;
+                }
+
+                .bg-grid {
+                    position: absolute;
+                    inset: 0;
+                    background-image: linear-gradient(rgba(0, 168, 255, 0.05) 1px, transparent 1px),
+                                    linear-gradient(90deg, rgba(0, 168, 255, 0.05) 1px, transparent 1px);
+                    background-size: 40px 40px;
+                    opacity: 0.4;
+                }
+
+                .orb-purple {
+                    position: absolute;
+                    width: 600px;
+                    height: 600px;
+                    bottom: -20%;
+                    left: -10%;
+                    background: radial-gradient(circle, rgba(120, 40, 255, 0.12) 0%, transparent 70%);
+                    filter: blur(80px);
+                    pointer-events: none;
+                }
+
+                .container {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    padding: 0 24px;
+                    position: relative;
+                    z-index: 1;
+                }
+
+                .header {
+                    text-align: center;
+                    margin-bottom: 72px;
+                }
+
+                .section-label {
+                    display: inline-flex;
+                    padding: 6px 16px;
+                    background: rgba(0, 168, 255, 0.1);
+                    border: 1px solid rgba(0, 168, 255, 0.2);
+                    border-radius: 40px;
+                    color: #00a8ff;
+                    font-size: 13px;
+                    font-weight: 700;
+                    letter-spacing: 0.05em;
+                    text-transform: uppercase;
+                    margin-bottom: 20px;
+                }
+
+                .section-title {
+                    font-family: 'Orbitron', sans-serif;
+                    font-size: clamp(32px, 4vw, 48px);
+                    font-weight: 800;
+                    color: #f0f4ff;
+                }
+
+                .text-gradient {
+                    background: linear-gradient(135deg, #00a8ff 0%, #00ff88 100%);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                }
+
+                .section-subtitle {
+                    font-size: 16px;
+                    color: #8899bb;
+                    max-width: 600px;
+                    margin: 20px auto 0;
+                    line-height: 1.6;
+                }
+
+                .timeline-container {
+                    position: relative;
+                }
+
+                .vertical-line {
+                    position: absolute;
+                    left: 50%;
+                    top: 0;
+                    bottom: 0;
+                    width: 1px;
+                    background: linear-gradient(180deg, transparent, rgba(0,168,255,0.2) 10%, rgba(0,168,255,0.2) 90%, transparent);
+                    transform: translateX(-50%);
+                    z-index: 0;
+                }
+
+                .desktop-steps {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 48px;
+                }
+
+                .step-row {
+                    display: grid;
+                    grid-template-columns: 1fr auto 1fr;
+                    gap: 32px;
+                    align-items: center;
+                    position: relative;
+                    z-index: 1;
+                }
+
+                .step-content-cell {
+                    width: 100%;
+                }
+
+                .step-dot-cell {
+                    display: flex;
+                    justify-content: center;
+                }
+
+                .dot {
+                    width: 64px;
+                    height: 64px;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 24px;
+                    flex-shrink: 0;
+                    transition: all 0.3s;
+                }
+
+                .dot:hover {
+                    transform: scale(1.1);
+                }
+
+                .mobile-steps {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 24px;
+                }
+
+                .mobile-card {
+                    display: flex;
+                    gap: 20px;
+                    align-items: flex-start;
+                    padding: 24px 20px;
+                    background: rgba(13, 21, 38, 0.4);
+                    border: 1px solid rgba(255, 255, 255, 0.05);
+                    border-radius: 16px;
+                }
+
+                .mobile-icon {
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 50%;
+                    flex-shrink: 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 22px;
+                }
+
+                .step-num {
+                    font-family: 'Orbitron', sans-serif;
+                    font-size: 11px;
+                    letter-spacing: 1px;
+                }
+
+                .mobile-title {
+                    font-size: 16px;
+                    font-weight: 700;
+                    color: #f0f4ff;
+                    margin: 4px 0 8px;
+                }
+
+                .mobile-desc {
+                    font-size: 13.5px;
+                    color: #8899bb;
+                    line-height: 1.65;
+                }
+
+                .mobile-detail {
+                    font-size: 11.5px;
+                    font-weight: 600;
+                    display: block;
+                    marginTop: 8px;
+                }
+
+                @media (min-width: 769px) {
+                    .md\:flex { display: flex; }
+                    .hidden { display: none; }
+                }
+
+                @media (max-width: 768px) {
+                    .md\:hidden { display: flex; }
+                    .hidden { display: none; }
+                }
+            `}</style>
         </section>
     );
 }
@@ -170,30 +318,62 @@ function StepContent({ step, reverse = false }: {
     reverse?: boolean;
 }) {
     return (
-        <div style={{
-            padding: '28px 32px',
-            background: 'var(--glass-bg)',
-            border: '1px solid var(--border-subtle)',
-            borderRadius: 16,
-            textAlign: reverse ? 'right' : 'left',
-            transition: 'all 0.3s',
-        }}>
-            <span className="font-display" style={{
-                fontSize: 11, letterSpacing: 2, color: step.color, fontWeight: 700
-            }}>{step.num}</span>
-            <h3 style={{
-                fontSize: 18, fontWeight: 700, color: 'var(--text-primary)',
-                margin: '6px 0 10px', lineHeight: 1.3
-            }}>{step.title}</h3>
-            <p style={{
-                fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: 12
-            }}>{step.desc}</p>
-            <span style={{
-                fontSize: 12, color: step.color, fontWeight: 600,
-                background: `${step.color}11`, padding: '3px 10px',
-                borderRadius: 20, border: `1px solid ${step.color}22`,
-                display: 'inline-block'
-            }}>✓ {step.detail}</span>
+        <div className="step-content-box">
+            <span className="step-num">{step.num}</span>
+            <h3 className="step-title">{step.title}</h3>
+            <p className="step-desc">{step.desc}</p>
+            <span className="step-badge">✓ {step.detail}</span>
+
+            <style jsx>{`
+                .step-content-box {
+                    padding: 28px 32px;
+                    background: rgba(13, 21, 38, 0.4);
+                    border: 1px solid rgba(255, 255, 255, 0.05);
+                    border-radius: 16px;
+                    text-align: ${reverse ? 'right' : 'left'};
+                    transition: all 0.3s;
+                }
+
+                .step-content-box:hover {
+                    background: rgba(13, 21, 38, 0.7);
+                    transform: translateY(-5px);
+                    border-color: rgba(0, 168, 255, 0.2);
+                }
+
+                .step-num {
+                    font-family: 'Orbitron', sans-serif;
+                    font-size: 11px;
+                    letter-spacing: 2px;
+                    color: ${step.color};
+                    font-weight: 700;
+                }
+
+                .step-title {
+                    font-size: 18px;
+                    font-weight: 700;
+                    color: #f0f4ff;
+                    margin: 6px 0 10px;
+                    line-height: 1.3;
+                }
+
+                .step-desc {
+                    font-size: 14px;
+                    color: #8899bb;
+                    line-height: 1.7;
+                    margin-bottom: 12px;
+                }
+
+                .step-badge {
+                    font-size: 12px;
+                    color: ${step.color};
+                    font-weight: 600;
+                    background: ${step.color}11;
+                    padding: 3px 10px;
+                    border-radius: 20px;
+                    border: 1px solid ${step.color}22;
+                    display: inline-block;
+                }
+            `}</style>
         </div>
     );
 }

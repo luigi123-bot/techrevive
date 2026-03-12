@@ -1,3 +1,5 @@
+"use client";
+
 export default function Testimonials() {
     const reviews = [
         {
@@ -69,91 +71,62 @@ export default function Testimonials() {
     ];
 
     return (
-        <section id="testimonios" className="section-padding" style={{
-            background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden'
-        }}>
+        <section id="testimonios" className="testimonials-section">
             {/* Background */}
-            <div className="bg-grid" style={{ position: 'absolute', inset: 0, opacity: 0.3 }} />
-            <div className="orb orb-blue" style={{ width: 500, height: 500, top: '30%', left: '-15%', opacity: 0.4 }} />
+            <div className="bg-grid"></div>
+            <div className="orb orb-blue"></div>
 
-            <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1 }}>
+            <div className="container">
                 {/* Header */}
-                <div style={{ textAlign: 'center', marginBottom: 64 }}>
-                    <div className="section-label" style={{ justifyContent: 'center' }}>Testimonios</div>
-                    <h2 className="section-title" style={{ textAlign: 'center' }}>
+                <div className="header">
+                    <div className="section-label">Testimonios</div>
+                    <h2 className="section-title">
                         Lo que dicen nuestros{' '}
                         <span className="text-gradient">clientes</span>
                     </h2>
-                    <p className="section-subtitle" style={{ margin: '0 auto', textAlign: 'center' }}>
+                    <p className="section-subtitle">
                         Más de 500 clientes satisfechos nos avalan. Su confianza es nuestra mayor motivación.
                     </p>
 
                     {/* Overall rating */}
-                    <div style={{
-                        display: 'inline-flex', alignItems: 'center', gap: 12,
-                        marginTop: 24, padding: '10px 24px',
-                        background: 'rgba(251,191,36,0.08)',
-                        border: '1px solid rgba(251,191,36,0.25)',
-                        borderRadius: 30
-                    }}>
-                        <div style={{ display: 'flex', gap: 3 }}>
+                    <div className="overall-rating">
+                        <div className="stars-box">
                             {'★★★★★'.split('').map((s, i) => (
-                                <span key={i} className="star" style={{ fontSize: 18 }}>{s}</span>
+                                <span key={i} className="star">{s}</span>
                             ))}
                         </div>
-                        <span style={{ fontSize: 20, fontWeight: 800, color: '#fbbf24', fontFamily: 'Orbitron, sans-serif' }}>5.0</span>
-                        <span style={{ fontSize: 13, color: 'var(--text-muted)' }}>· +500 reseñas</span>
+                        <span className="rating-val">5.0</span>
+                        <span className="rating-count">· +500 reseñas</span>
                     </div>
                 </div>
 
                 {/* Reviews grid */}
-                <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-                    gap: 24
-                }}>
+                <div className="reviews-grid">
                     {reviews.map((r, i) => (
-                        <div key={r.id} id={r.id} className="testimonial-card"
-                            style={{ animationDelay: `${i * 0.1}s` }}>
+                        <div key={r.id} className="testimonial-card" style={{ '--delay': `${i * 0.1}s` } as any}>
                             {/* Stars */}
-                            <div style={{ display: 'flex', gap: 3, marginBottom: 16 }}>
+                            <div className="stars">
                                 {Array.from({ length: r.rating }).map((_, j) => (
-                                    <span key={j} className="star" style={{ fontSize: 14 }}>★</span>
+                                    <span key={j} className="card-star">★</span>
                                 ))}
                             </div>
 
                             {/* Text */}
-                            <p style={{
-                                fontSize: 14.5, color: 'var(--text-secondary)',
-                                lineHeight: 1.75, marginBottom: 20, fontStyle: 'italic'
-                            }}>
-                                "{r.text}"
-                            </p>
+                            <p className="review-text">"{r.text}"</p>
 
                             {/* Service badge */}
-                            <div style={{ marginBottom: 20 }}>
-                                <span style={{
-                                    fontSize: 11, padding: '3px 10px', borderRadius: 20, fontWeight: 600,
-                                    color: 'var(--electric-blue)',
-                                    background: 'rgba(0,168,255,0.08)',
-                                    border: '1px solid rgba(0,168,255,0.2)'
-                                }}>{r.service}</span>
+                            <div className="badge-box">
+                                <span className="service-badge">{r.service}</span>
                             </div>
 
                             {/* Author */}
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 12, borderTop: '1px solid var(--border-subtle)', paddingTop: 16 }}>
-                                <div style={{
-                                    width: 42, height: 42, borderRadius: '50%', flexShrink: 0,
-                                    background: `${r.avatarColor}22`,
-                                    border: `1.5px solid ${r.avatarColor}55`,
-                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                    fontSize: 12, fontWeight: 700, color: r.avatarColor
-                                }}>
+                            <div className="author">
+                                <div className="avatar" style={{ background: `${r.avatarColor}22`, border: `1.5px solid ${r.avatarColor}55`, color: r.avatarColor }}>
                                     {r.avatar}
                                 </div>
                                 <div>
-                                    <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-primary)' }}>{r.name}</div>
-                                    <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>{r.role} · {r.date}</div>
+                                    <div className="author-name">{r.name}</div>
+                                    <div className="author-role">{r.role} · {r.date}</div>
                                 </div>
                             </div>
                         </div>
@@ -161,16 +134,232 @@ export default function Testimonials() {
                 </div>
 
                 {/* CTA */}
-                <div style={{ textAlign: 'center', marginTop: 56 }}>
-                    <p style={{ color: 'var(--text-secondary)', marginBottom: 20, fontSize: 15 }}>
-                        ¿Quieres ser el próximo cliente satisfecho?
-                    </p>
-                    <a href="https://wa.me/58412000000" target="_blank" rel="noopener noreferrer"
-                        className="btn-primary" id="testimonials-cta-btn">
+                <div className="cta-box">
+                    <p>¿Quieres ser el próximo cliente satisfecho?</p>
+                    <a href="https://wa.me/58412000000" target="_blank" rel="noopener noreferrer" className="btn-primary">
                         ¡Contáctanos ahora!
                     </a>
                 </div>
             </div>
+
+            <style jsx>{`
+                .testimonials-section {
+                    background: #0a0f1e;
+                    position: relative;
+                    overflow: hidden;
+                    padding: 100px 0;
+                    font-family: 'Inter', sans-serif;
+                }
+
+                .bg-grid {
+                    position: absolute;
+                    inset: 0;
+                    background-image: linear-gradient(rgba(0, 168, 255, 0.05) 1px, transparent 1px),
+                                    linear-gradient(90deg, rgba(0, 168, 255, 0.05) 1px, transparent 1px);
+                    background-size: 40px 40px;
+                    opacity: 0.3;
+                }
+
+                .orb-blue {
+                    position: absolute;
+                    width: 500px;
+                    height: 500px;
+                    background: radial-gradient(circle, rgba(0, 168, 255, 0.15) 0%, transparent 70%);
+                    filter: blur(80px);
+                    top: 30%;
+                    left: -15%;
+                    opacity: 0.4;
+                    pointer-events: none;
+                }
+
+                .container {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    padding: 0 24px;
+                    position: relative;
+                    z-index: 1;
+                }
+
+                .header {
+                    text-align: center;
+                    margin-bottom: 64px;
+                }
+
+                .section-label {
+                    display: inline-flex;
+                    padding: 6px 16px;
+                    background: rgba(0, 168, 255, 0.1);
+                    border: 1px solid rgba(0, 168, 255, 0.2);
+                    border-radius: 40px;
+                    color: #00a8ff;
+                    font-size: 13px;
+                    font-weight: 700;
+                    letter-spacing: 0.05em;
+                    text-transform: uppercase;
+                    margin-bottom: 20px;
+                }
+
+                .section-title {
+                    font-family: 'Orbitron', sans-serif;
+                    font-size: clamp(32px, 4vw, 48px);
+                    font-weight: 800;
+                    color: #f0f4ff;
+                }
+
+                .text-gradient {
+                    background: linear-gradient(135deg, #00a8ff 0%, #00ff88 100%);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                }
+
+                .section-subtitle {
+                    font-size: 16px;
+                    color: #8899bb;
+                    max-width: 600px;
+                    margin: 20px auto 0;
+                    line-height: 1.6;
+                }
+
+                .overall-rating {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 12px;
+                    margin-top: 24px;
+                    padding: 10px 24px;
+                    background: rgba(251, 191, 36, 0.08);
+                    border: 1px solid rgba(251, 191, 36, 0.25);
+                    border-radius: 30px;
+                }
+
+                .star {
+                    color: #fbbf24;
+                    font-size: 18px;
+                }
+
+                .rating-val {
+                    font-family: 'Orbitron', sans-serif;
+                    font-size: 20px;
+                    font-weight: 800;
+                    color: #fbbf24;
+                }
+
+                .rating-count {
+                    font-size: 13px;
+                    color: #4a5568;
+                }
+
+                .reviews-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+                    gap: 24px;
+                }
+
+                .testimonial-card {
+                    background: rgba(13, 21, 38, 0.6);
+                    backdrop-filter: blur(10px);
+                    border: 1px solid rgba(255, 255, 255, 0.05);
+                    border-radius: 20px;
+                    padding: 32px;
+                    transition: all 0.3s;
+                    animation: fadeInUp 0.6s var(--delay) both;
+                }
+
+                .testimonial-card:hover {
+                    background: rgba(13, 21, 38, 0.8);
+                    transform: translateY(-5px);
+                    border-color: rgba(0, 168, 255, 0.2);
+                }
+
+                .card-star {
+                    color: #fbbf24;
+                    font-size: 14px;
+                }
+
+                .review-text {
+                    font-size: 14.5px;
+                    color: #8899bb;
+                    line-height: 1.75;
+                    margin: 16px 0 20px;
+                    font-style: italic;
+                }
+
+                .service-badge {
+                    font-size: 11px;
+                    padding: 3px 10px;
+                    border-radius: 20px;
+                    font-weight: 600;
+                    color: #00a8ff;
+                    background: rgba(0, 168, 255, 0.08);
+                    border: 1px solid rgba(0, 168, 255, 0.2);
+                }
+
+                .author {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    border-top: 1px solid rgba(255, 255, 255, 0.05);
+                    padding-top: 16px;
+                    margin-top: 20px;
+                }
+
+                .avatar {
+                    width: 42px;
+                    height: 42px;
+                    border-radius: 50%;
+                    flex-shrink: 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 12px;
+                    font-weight: 700;
+                }
+
+                .author-name {
+                    font-size: 14px;
+                    font-weight: 700;
+                    color: #f0f4ff;
+                }
+
+                .author-role {
+                    font-size: 12px;
+                    color: #4a5568;
+                }
+
+                .cta-box {
+                    text-align: center;
+                    marginTop: 56px;
+                }
+
+                .cta-box p {
+                    color: #8899bb;
+                    margin-bottom: 20px;
+                    font-size: 15px;
+                }
+
+                .btn-primary {
+                    display: inline-block;
+                    padding: 14px 32px;
+                    background: linear-gradient(135deg, #00a8ff, #0077cc);
+                    color: white;
+                    border-radius: 12px;
+                    text-decoration: none;
+                    font-weight: 700;
+                    font-size: 15px;
+                    transition: all 0.3s;
+                    box-shadow: 0 4px 15px rgba(0, 168, 255, 0.3);
+                }
+
+                .btn-primary:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 6px 20px rgba(0, 168, 255, 0.5);
+                }
+
+                @keyframes fadeInUp {
+                    from { opacity: 0; transform: translateY(20px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+            `}</style>
         </section>
     );
 }
