@@ -217,6 +217,7 @@ export default function AdminDashboard() {
                         <p className="breadcrumb">TechRevive Admin / {activeTab}</p>
                     </div>
                     <div className="h-right">
+                        <a href="/" target="_blank" rel="noopener noreferrer" className="btn-view-site">🌐 Ver Sitio Web</a>
                         <button className="btn-logout" onClick={logout}>Cerrar Sesión</button>
                     </div>
                 </header>
@@ -602,6 +603,9 @@ export default function AdminDashboard() {
                 .main-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
                 .h-left h2 { font-family: 'Orbitron', sans-serif; font-size: 28px; font-weight: 900; color: #fff; margin-bottom: 4px; }
                 .breadcrumb { font-size: 13px; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+                .h-right { display: flex; align-items: center; gap: 12px; }
+                .btn-view-site { background: rgba(0, 168, 255, 0.1); border: 1px solid rgba(0, 168, 255, 0.25); color: #00a8ff; padding: 10px 20px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.3s; text-decoration: none; font-size: 14px; display: inline-flex; align-items: center; gap: 6px; }
+                .btn-view-site:hover { background: linear-gradient(135deg, #00a8ff, #0055cc); color: #fff; border-color: #00a8ff; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 168, 255, 0.35); }
                 .btn-logout { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: #f87171; padding: 10px 20px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.3s; }
                 .btn-logout:hover { background: #ef4444; color: #fff; border-color: #ef4444; transform: translateY(-2px); }
 
