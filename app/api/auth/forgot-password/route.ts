@@ -29,24 +29,19 @@ export async function POST(req: NextRequest) {
         user.resetPasswordExpire = resetExpire;
         await user.save();
 
-        // Configure Nodemailer
+        // Configure Nodemailer with IPv4 Fix for Coolify/Production
         const emailUser = process.env.EMAIL_USER || '';
         const emailPass = (process.env.EMAIL_PASS || '').replace(/\s/g, '');
-
-        console.log('--- Diagnóstico de Correo ---');
-        console.log('Correo:', emailUser);
-        console.log('Longitud Contraseña:', emailPass.length, '(Debe ser 16)');
 
         const transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
             port: 587,
-            secure: false, // true para 465, false para otros puertos (como 587)
+            secure: false,
             auth: {
                 user: emailUser,
                 pass: emailPass,
             },
             tls: {
-                // Configuraciones específicas para evitar bloqueos en Vercel/Producción
                 rejectUnauthorized: false,
                 minVersion: 'TLSv1.2'
             },
@@ -59,17 +54,8 @@ export async function POST(req: NextRequest) {
             socketTimeout: 30000
         } as any);
 
-        // Verificar conexión antes de enviar
-        try {
-            await transporter.verify();
-            console.log("✅ Servidor de correo listo");
-        } catch (verifyError) {
-            console.error("❌ Error de verificación SMTP:", verifyError);
-            throw verifyError;
-        }
-
         const mailOptions = {
-            from: `"TechRevive Support" <${process.env.EMAIL_USER}>`,
+            from: `"TechRevive Support" <${emailUser}>`,
             to: user.email,
             subject: 'Código de Recuperación de Contraseña - TechRevive',
             html: `
