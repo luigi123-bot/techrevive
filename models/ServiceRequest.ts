@@ -8,7 +8,7 @@ const ServiceRequestSchema = new mongoose.Schema({
     message: { type: String, required: true },
     status: {
         type: String,
-        enum: ['pending', 'contacted', 'completed', 'cancelled'],
+        enum: ['pending', 'contacted', 'in_progress', 'completed', 'cancelled'],
         default: 'pending'
     },
     source: { type: String, default: 'web_form' } // web_form, chatbot, etc.

@@ -1,8 +1,7 @@
 import mongoose from 'mongoose';
-import dns from 'dns';
 
-// Forzar el uso de DNS de Google para evitar el error ETIMEOUT de algunos ISPs
-dns.setServers(['8.8.8.8', '8.8.4.4']);
+// Configuración de DNS optimizada solo para la conexión de Mongoose si es necesario
+// dns.setServers se eliminó para evitar conflictos globales en el proceso Node.js
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
@@ -29,9 +28,14 @@ async function dbConnect() {
     if (!cached.promise) {
         const opts = {
             bufferCommands: false,
+            serverSelectionTimeoutMS: 10000, // Fallar rápido (10s) en lugar de esperar 30s
+            connectTimeoutMS: 10000,
+            socketTimeoutMS: 45000,
+            family: 4, // Forzar IPv4 para evitar problemas de resolución SRV en IPv6
         };
 
         cached.promise = mongoose.connect(MONGODB_URI!, opts).then((mongoose) => {
+            console.log('✅ MongoDB Conectado exitosamente');
             return mongoose;
         });
     }

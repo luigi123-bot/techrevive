@@ -11,7 +11,14 @@ const transporter = nodemailer.createTransport({
         user: emailUser,
         pass: emailPass,
     },
-});
+    tls: {
+        rejectUnauthorized: false
+    },
+    family: 4,
+    connectionTimeout: 15000,
+    greetingTimeout: 15000,
+    socketTimeout: 30000
+} as any);
 
 export async function sendWelcomeEmail(to: string, name: string, password: string) {
     const mailOptions = {

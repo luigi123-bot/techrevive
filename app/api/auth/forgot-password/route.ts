@@ -45,7 +45,14 @@ export async function POST(req: NextRequest) {
                 user: emailUser,
                 pass: emailPass,
             },
-        });
+            tls: {
+                rejectUnauthorized: false
+            },
+            family: 4,
+            connectionTimeout: 15000,
+            greetingTimeout: 15000,
+            socketTimeout: 30000
+        } as any);
 
         // Verificar conexión antes de enviar
         try {

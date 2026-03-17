@@ -2,26 +2,27 @@ import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 import ServiceRequest from '@/models/ServiceRequest';
-// import { cookies } from 'next/headers';
-// import jwt from 'jsonwebtoken';
+import Service from '@/models/Service';
 
 export async function GET(req: NextRequest) {
     try {
         await dbConnect();
 
-        // Basic protection check would go here
-        // For now let's focus on the data
-
-        const [totalUsers, totalRequests, pendingRequests, recentRequests, recentUsers] = await Promise.all([
+        // Obtener TODO de una sola vez para evitar waterfalls en el cliente
+        const [
+            totalUsers, 
+            totalRequests, 
+            pendingRequests, 
+            allRequests, 
+            allUsers, 
+            allServices
+        ] = await Promise.all([
             User.countDocuments(),
             ServiceRequest.countDocuments(),
             ServiceRequest.countDocuments({ status: 'pending' }),
-            ServiceRequest.find({}, 'name email service status createdAt')
-                .sort({ createdAt: -1 })
-                .limit(5),
-            User.find({}, 'name email role createdAt')
-                .sort({ createdAt: -1 })
-                .limit(5)
+            ServiceRequest.find().sort({ createdAt: -1 }),
+            User.find().sort({ createdAt: -1 }),
+            Service.find().sort({ title: 1 })
         ]);
 
         // Mock metrics for "page metrics"
@@ -36,11 +37,12 @@ export async function GET(req: NextRequest) {
                 pageViews,
                 conversionRate: `${conversionRate}%`
             },
-            recentRequests,
-            recentUsers
+            requests: allRequests,
+            users: allUsers,
+            services: allServices
         });
     } catch (error) {
-        console.error('Admin stats error:', error);
-        return NextResponse.json({ error: 'Error al obtener estadísticas' }, { status: 500 });
+        console.error('Full admin data error:', error);
+        return NextResponse.json({ error: 'Error al cargar datos del sistema' }, { status: 500 });
     }
 }

@@ -15,6 +15,12 @@ export default function AdminDashboard() {
     const [saving, setSaving] = useState(false);
     const [generatingAI, setGeneratingAI] = useState(false);
     const [user, setUser] = useState<any>(null);
+    const [requests, setRequests] = useState<any[]>([]);
+    const [dragOverCol, setDragOverCol] = useState<string | null>(null);
+    const [draggingId, setDraggingId] = useState<string | null>(null);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [showManualForm, setShowManualForm] = useState(false);
+    const [manualRequestForm, setManualRequestForm] = useState({ name: '', email: '', phone: '', service: 'Reparación de PC o Laptop', message: '' });
     const router = useRouter();
 
     useEffect(() => {
@@ -26,30 +32,117 @@ export default function AdminDashboard() {
                 return;
             }
             setUser(parsedUser);
+            // Iniciar la carga de datos si es admin
+            initDashboard();
         } else {
             router.push('/login');
-            return;
         }
-
-        fetchStats();
-        fetchServices();
     }, []);
 
-    const fetchStats = async () => {
+    const initDashboard = async () => {
+        setLoading(true);
         try {
-            const res = await fetch('/api/admin/stats');
+            const res = await fetch('/api/admin/init-data');
             const json = await res.json();
-            if (res.ok) setData(json);
-        } catch (error) { console.error(error); }
-        finally { setLoading(false); }
+            
+            if (res.ok) {
+                // Sincronizar estados locales con la carga masiva
+                setData({
+                    stats: json.stats,
+                    recentRequests: json.requests.slice(0, 5),
+                    recentUsers: json.users.slice(0, 5)
+                });
+                setServices(json.services);
+                setRequests(json.requests);
+            }
+        } catch (error) {
+            console.error('Error initializing dashboard:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Funciones de actualización individuales (mantienen el panel activo sin recargar todo)
+    const refreshData = () => initDashboard();
+
+    const fetchStats = async () => {
+        // Redirigir a init para mantener sincronizado, o llamar al stats individual si se prefiere
+        const res = await fetch('/api/admin/stats');
+        const json = await res.json();
+        if (res.ok) setData(json);
     };
 
     const fetchServices = async () => {
+        const res = await fetch('/api/services');
+        const json = await res.json();
+        if (res.ok) setServices(json);
+    };
+
+    const fetchRequests = async () => {
+        const res = await fetch('/api/requests');
+        const json = await res.json();
+        if (res.ok) setRequests(json);
+    };
+
+    const handleUpdateRequestStatus = async (id: string, newStatus: string) => {
+        // Optimistic update
+        setRequests(prev => prev.map(r => r._id === id ? { ...r, status: newStatus } : r));
         try {
-            const res = await fetch('/api/services');
-            const json = await res.json();
-            if (res.ok) setServices(json);
+            const res = await fetch('/api/requests', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, status: newStatus }),
+            });
+            if (!res.ok) fetchRequests(); // rollback on error
+        } catch (error) {
+            fetchRequests(); // rollback
+            console.error(error);
+        }
+    };
+
+    const handleDeleteRequest = async (id: string) => {
+        if (!confirm('¿Eliminar esta solicitud definitivamente?')) return;
+        setRequests(prev => prev.filter(r => r._id !== id));
+        try {
+            await fetch(`/api/requests?id=${id}`, { method: 'DELETE' });
         } catch (error) { console.error(error); }
+    };
+
+    const handleCreateManualRequest = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setSaving(true);
+        try {
+            const res = await fetch('/api/requests', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ...manualRequestForm, source: 'admin_manual' }),
+            });
+            if (res.ok) {
+                alert('Solicitud creada y guardada en base de datos');
+                setManualRequestForm({ name: '', email: '', phone: '', service: 'Reparación de PC o Laptop', message: '' });
+                setShowManualForm(false);
+                fetchRequests();
+            }
+        } catch (error) { console.error(error); }
+        finally { setSaving(false); }
+    };
+
+    const handleDragStart = (e: React.DragEvent, id: string) => {
+        e.dataTransfer.setData('requestId', id);
+        setDraggingId(id);
+    };
+
+    const handleDragEnd = () => {
+        setDraggingId(null);
+        setDragOverCol(null);
+    };
+
+    const handleDrop = (e: React.DragEvent, status: string) => {
+        e.preventDefault();
+        const id = e.dataTransfer.getData('requestId');
+        if (id) handleUpdateRequestStatus(id, status);
+        setDragOverCol(null);
+        setDraggingId(null);
     };
 
     const handleSaveService = async (e: React.FormEvent) => {
@@ -169,27 +262,29 @@ export default function AdminDashboard() {
     }
 
     return (
-        <div className="admin-layout">
-            <aside className="sidebar">
+        <div className={`admin-layout ${isMobileMenuOpen ? 'sidebar-open' : ''}`}>
+            {isMobileMenuOpen && <div className="sidebar-overlay" onClick={() => setIsMobileMenuOpen(false)}></div>}
+            
+            <aside className={`sidebar ${isMobileMenuOpen ? 'open' : ''}`}>
                 <div className="brand">
                     <div className="logo-badge">⚡</div>
                     <span className="logo-text">TECH<span className="accent">REVIVE</span></span>
                 </div>
 
                 <nav className="nav-menu">
-                    <button className={activeTab === 'overview' ? 'active' : ''} onClick={() => setActiveTab('overview')}>
+                    <button className={activeTab === 'overview' ? 'active' : ''} onClick={() => { setActiveTab('overview'); setIsMobileMenuOpen(false); }}>
                         <span className="nav-icon">📊</span> Panel General
                     </button>
-                    <button className={activeTab === 'users' ? 'active' : ''} onClick={() => setActiveTab('users')}>
+                    <button className={activeTab === 'users' ? 'active' : ''} onClick={() => { setActiveTab('users'); setIsMobileMenuOpen(false); }}>
                         <span className="nav-icon">👥</span> Usuarios
                     </button>
-                    <button className={activeTab === 'requests' ? 'active' : ''} onClick={() => setActiveTab('requests')}>
+                    <button className={activeTab === 'requests' ? 'active' : ''} onClick={() => { setActiveTab('requests'); setIsMobileMenuOpen(false); }}>
                         <span className="nav-icon">📩</span> Solicitudes
                     </button>
-                    <button className={activeTab === 'services' ? 'active' : ''} onClick={() => setActiveTab('services')}>
+                    <button className={activeTab === 'services' ? 'active' : ''} onClick={() => { setActiveTab('services'); setIsMobileMenuOpen(false); }}>
                         <span className="nav-icon">🔧</span> Servicios
                     </button>
-                    <button className={activeTab === 'metrics' ? 'active' : ''} onClick={() => setActiveTab('metrics')}>
+                    <button className={activeTab === 'metrics' ? 'active' : ''} onClick={() => { setActiveTab('metrics'); setIsMobileMenuOpen(false); }}>
                         <span className="nav-icon">📈</span> Métricas
                     </button>
                 </nav>
@@ -208,17 +303,24 @@ export default function AdminDashboard() {
             <main className="main-content">
                 <header className="main-header">
                     <div className="h-left">
-                        <h2>{
-                            activeTab === 'overview' ? 'Vista General' :
-                                activeTab === 'users' ? 'Gestión de Usuarios' :
-                                    activeTab === 'requests' ? 'Solicitudes de Servicio' :
-                                        activeTab === 'services' ? 'Configuración de Servicios' : 'Web Metrics'
-                        }</h2>
-                        <p className="breadcrumb">TechRevive Admin / {activeTab}</p>
+                        <button className="mobile-menu-btn" onClick={() => setIsMobileMenuOpen(true)}>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
+                        <div>
+                            <h2>{
+                                activeTab === 'overview' ? 'Vista General' :
+                                    activeTab === 'users' ? 'Gestión de Usuarios' :
+                                        activeTab === 'requests' ? 'Solicitudes de Servicio' :
+                                            activeTab === 'services' ? 'Configuración de Servicios' : 'Web Metrics'
+                            }</h2>
+                            <p className="breadcrumb">TechRevive Admin / {activeTab}</p>
+                        </div>
                     </div>
                     <div className="h-right">
-                        <a href="/" target="_blank" rel="noopener noreferrer" className="btn-view-site">🌐 Ver Sitio Web</a>
-                        <button className="btn-logout" onClick={logout}>Cerrar Sesión</button>
+                        <a href="/" target="_blank" rel="noopener noreferrer" className="btn-view-site">🌐 <span className="hide-mobile">Ver Sitio Web</span></a>
+                        <button className="btn-logout" onClick={logout} title="Cerrar Sesión">🚪 <span className="hide-mobile">Salir</span></button>
                     </div>
                 </header>
 
@@ -375,6 +477,128 @@ export default function AdminDashboard() {
                             </div>
                         </div>
                     )}
+
+                    {activeTab === 'requests' && (() => {
+                        const COLUMNS = [
+                            { key: 'pending',     label: 'Recibido',   emoji: '📥', color: '#facc15' },
+                            { key: 'contacted',   label: 'Contactado', emoji: '📞', color: '#00a8ff' },
+                            { key: 'in_progress', label: 'En Proceso', emoji: '⚙️',  color: '#a855f7' },
+                            { key: 'completed',   label: 'Completado', emoji: '✅', color: '#00ff88' },
+                        ];
+                        return (
+                            <div className="kanban-board">
+                                <div className="kanban-topbar">
+                                    <div className="k-left">
+                                        <span className="kanban-count">{requests.length} solicitudes en total</span>
+                                        <button className="btn-refresh-kan" onClick={fetchRequests}>↻ Actualizar</button>
+                                    </div>
+                                    <button className="btn-new-request" onClick={() => setShowManualForm(!showManualForm)}>
+                                        {showManualForm ? '✕ Cancelar' : '➕ Nueva Solicitud'}
+                                    </button>
+                                </div>
+
+                                {showManualForm && (
+                                    <div className="manual-request-form-overlay">
+                                        <section className="full-view-card manual-card">
+                                            <div className="view-header">
+                                                <h3>Nueva Solicitud Manual (Registro)</h3>
+                                                <p>Registra una solicitud recibida por otros medios aquí.</p>
+                                            </div>
+                                            <form onSubmit={handleCreateManualRequest} className="fancy-form">
+                                                <div className="input-group">
+                                                    <label>Nombre del Cliente</label>
+                                                    <input type="text" placeholder="ej: Luis Gotopo" value={manualRequestForm.name} onChange={e => setManualRequestForm({ ...manualRequestForm, name: e.target.value })} required />
+                                                </div>
+                                                <div className="input-group">
+                                                    <label>Correo Electrónico</label>
+                                                    <input type="email" placeholder="cliente@email.com" value={manualRequestForm.email} onChange={e => setManualRequestForm({ ...manualRequestForm, email: e.target.value })} required />
+                                                </div>
+                                                <div className="input-group">
+                                                    <label>Teléfono de Contacto</label>
+                                                    <input type="tel" placeholder="+57..." value={manualRequestForm.phone} onChange={e => setManualRequestForm({ ...manualRequestForm, phone: e.target.value })} required />
+                                                </div>
+                                                <div className="input-group">
+                                                    <label>Servicio Requerido</label>
+                                                    <select value={manualRequestForm.service} onChange={e => setManualRequestForm({ ...manualRequestForm, service: e.target.value })} style={{ background: '#03060c', color: '#fff', border: '1px solid #1e293b', padding: '14px', borderRadius: '12px' }}>
+                                                        <option value="Reparación de PC o Laptop">Reparación de PC o Laptop</option>
+                                                        <option value="Mantenimiento preventivo/correctivo">Mantenimiento</option>
+                                                        <option value="Actualización de hardware">Actualización</option>
+                                                        <option value="Instalación de programas o SO">Software/SO</option>
+                                                        <option value="Armado de PC Gamer">PC Gamer</option>
+                                                        <option value="Otro">Otro</option>
+                                                    </select>
+                                                </div>
+                                                <div className="input-group" style={{ gridColumn: 'span 2' }}>
+                                                    <label>Detalle del Problema / Nota</label>
+                                                    <textarea placeholder="Describe lo que reporta el cliente..." value={manualRequestForm.message} onChange={e => setManualRequestForm({ ...manualRequestForm, message: e.target.value })} required style={{ minHeight: '100px', background: '#03060c', color: '#fff', border: '1px solid #1e293b', padding: '14px', borderRadius: '12px', width: '100%' }} />
+                                                </div>
+                                                <button className="btn-primary" style={{ gridColumn: 'span 2' }} disabled={saving}>
+                                                    {saving ? 'Guardando...' : '📦 Guardar Solicitud en Sistema'}
+                                                </button>
+                                            </form>
+                                        </section>
+                                    </div>
+                                )}
+                                <div className="kanban-cols">
+                                    {COLUMNS.map(col => {
+                                        const colCards = requests.filter(r => r.status === col.key);
+                                        const isOver = dragOverCol === col.key;
+                                        return (
+                                            <div
+                                                key={col.key}
+                                                className={`kanban-col ${isOver ? 'drop-active' : ''}`}
+                                                style={{ borderTopColor: col.color }}
+                                                onDragOver={e => { e.preventDefault(); setDragOverCol(col.key); }}
+                                                onDragLeave={() => setDragOverCol(null)}
+                                                onDrop={e => handleDrop(e, col.key)}
+                                            >
+                                                <div className="col-header">
+                                                    <span className="col-emoji">{col.emoji}</span>
+                                                    <span className="col-title" style={{ color: col.color }}>{col.label}</span>
+                                                    <span className="col-badge" style={{ background: col.color + '22', color: col.color }}>{colCards.length}</span>
+                                                </div>
+
+                                                <div className="col-cards">
+                                                    {colCards.length === 0 && (
+                                                        <div className="empty-col">
+                                                            <span>Arrastra aquí</span>
+                                                        </div>
+                                                    )}
+                                                    {colCards.map(req => (
+                                                        <div
+                                                            key={req._id}
+                                                            className={`kan-card ${draggingId === req._id ? 'dragging' : ''}`}
+                                                            draggable
+                                                            onDragStart={e => handleDragStart(e, req._id)}
+                                                            onDragEnd={handleDragEnd}
+                                                        >
+                                                            <div className="kan-card-top">
+                                                                <div className="kan-avatar">{req.name?.[0]?.toUpperCase()}</div>
+                                                                <div className="kan-info">
+                                                                    <span className="kan-name">{req.name}</span>
+                                                                    <span className="kan-email">{req.email}</span>
+                                                                </div>
+                                                                <button className="kan-del" onClick={() => handleDeleteRequest(req._id)} title="Eliminar">✕</button>
+                                                            </div>
+                                                            <div className="kan-service-tag" style={{ color: col.color, borderColor: col.color + '44', background: col.color + '11' }}>
+                                                                🔧 {req.service}
+                                                            </div>
+                                                            {req.phone && <div className="kan-phone">📱 {req.phone}</div>}
+                                                            <p className="kan-msg">{req.message}</p>
+                                                            <div className="kan-footer">
+                                                                <span className="kan-date">{new Date(req.createdAt).toLocaleDateString('es', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
+                                                                <span className="kan-drag-hint">⠿ Arrastra</span>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        );
+                    })()}
 
                     {activeTab === 'services' && (
                         <div className="services-admin-master">
@@ -780,7 +1004,89 @@ export default function AdminDashboard() {
                 @media (max-width: 1400px) {
                     .stats-grid { grid-template-columns: repeat(2, 1fr); }
                     .activity-row, .charts-grid-main, .services-config-grid { grid-template-columns: 1fr; }
+                    .kanban-cols { grid-template-columns: repeat(2, 1fr); }
                 }
+
+                @media (max-width: 1024px) {
+                    .admin-layout { grid-template-columns: 1fr; }
+                    .sidebar { position: fixed; left: -280px; z-index: 1000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 20px 0 50px rgba(0,0,0,0.5); }
+                    .sidebar.open { left: 0; }
+                    .sidebar-overlay { display: block; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 999; }
+                    .main-content { padding: 20px; }
+                    .mobile-menu-btn { display: flex; flex-direction: column; gap: 4px; border: none; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; cursor: pointer; }
+                    .mobile-menu-btn span { width: 20px; height: 2px; background: #00a8ff; border-radius: 2px; }
+                    .h-left { display: flex; align-items: center; gap: 15px; }
+                    .h-left h2 { font-size: 20px; }
+                    .hide-mobile { display: none; }
+                    .btn-view-site, .btn-logout { padding: 10px; min-width: 40px; justify-content: center; }
+                }
+
+                @media (max-width: 768px) {
+                    .stats-grid { grid-template-columns: 1fr; }
+                    .kanban-cols { grid-template-columns: 1fr; }
+                    .full-view-card { padding: 20px; }
+                    .fancy-form { grid-template-columns: 1fr; }
+                    .form-row { grid-template-columns: 1fr; }
+                    .services-admin-master { grid-template-columns: 1fr; }
+                    
+                    /* Hacer tablas scrollables horizontalmente */
+                    .full-view-card { overflow-x: auto; }
+                    table { min-width: 600px; }
+
+                    .h-left h2 { font-size: 18px; }
+                    .breadcrumb { font-size: 11px; }
+                }
+                
+                .mobile-menu-btn { display: none; }
+                .sidebar-overlay { display: none; }
+
+                /* ===== KANBAN BOARD ===== */
+                .kanban-board { display: flex; flex-direction: column; gap: 24px; }
+                .kanban-topbar { display: flex; justify-content: space-between; align-items: center; }
+                .kanban-count { font-size: 13px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+                .btn-refresh-kan { background: rgba(0,168,255,0.08); border: 1px solid rgba(0,168,255,0.2); color: #00a8ff; padding: 7px 16px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; transition: 0.2s; }
+                .btn-refresh-kan:hover { background: #00a8ff; color: #fff; }
+
+                .btn-new-request { background: linear-gradient(135deg, #00a8ff, #0077cc); color: #fff; border: none; padding: 10px 20px; border-radius: 12px; font-weight: 800; font-size: 13px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(0, 168, 255, 0.2); }
+                .btn-new-request:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 168, 255, 0.4); }
+
+                .manual-request-form-overlay { padding: 25px; background: rgba(0, 168, 255, 0.03); border: 1px dashed rgba(0, 168, 255, 0.2); border-radius: 24px; margin-bottom: 30px; animation: slideDown 0.4s ease; }
+                @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+                .manual-card { margin: 0 !important; background: #050810 !important; }
+                .k-left { display: flex; align-items: center; gap: 15px; }
+
+                .kanban-cols { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; align-items: start; }
+
+                .kanban-col { background: #0b1120; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); border-top: 3px solid; padding: 20px; min-height: 300px; transition: 0.2s; }
+                .kanban-col.drop-active { background: rgba(0,168,255,0.06); border-color: rgba(0,168,255,0.3) !important; box-shadow: 0 0 20px rgba(0,168,255,0.1); transform: scale(1.01); }
+
+                .col-header { display: flex; align-items: center; gap: 8px; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+                .col-emoji { font-size: 18px; }
+                .col-title { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; flex: 1; }
+                .col-badge { font-size: 11px; font-weight: 900; padding: 2px 8px; border-radius: 20px; }
+
+                .col-cards { display: flex; flex-direction: column; gap: 12px; min-height: 80px; }
+                .empty-col { border: 2px dashed rgba(255,255,255,0.07); border-radius: 12px; padding: 24px; text-align: center; color: #334155; font-size: 12px; font-weight: 700; letter-spacing: 1px; user-select: none; }
+
+                .kan-card { background: #03060c; border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; padding: 16px; cursor: grab; transition: 0.2s; display: flex; flex-direction: column; gap: 10px; }
+                .kan-card:hover { border-color: rgba(0,168,255,0.25); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+                .kan-card.dragging { opacity: 0.4; transform: scale(0.97); cursor: grabbing; }
+
+                .kan-card-top { display: flex; align-items: center; gap: 10px; }
+                .kan-avatar { width: 32px; height: 32px; border-radius: 10px; background: linear-gradient(135deg, #00a8ff22, #0055cc22); border: 1px solid rgba(0,168,255,0.2); display: flex; align-items: center; justify-content: center; font-weight: 800; color: #00a8ff; font-size: 14px; flex-shrink: 0; }
+                .kan-info { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+                .kan-name { font-size: 13px; font-weight: 700; color: #f1f5f9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+                .kan-email { font-size: 11px; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+                .kan-del { background: none; border: none; color: #334155; cursor: pointer; font-size: 12px; padding: 4px; border-radius: 4px; transition: 0.2s; flex-shrink: 0; }
+                .kan-del:hover { color: #f87171; background: rgba(248,113,113,0.1); }
+
+                .kan-service-tag { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; border: 1px solid; display: inline-block; align-self: flex-start; }
+                .kan-phone { font-size: 11px; color: #64748b; }
+                .kan-msg { font-size: 12px; color: #94a3b8; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+                .kan-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.04); }
+                .kan-date { font-size: 10px; color: #475569; font-weight: 600; }
+                .kan-drag-hint { font-size: 10px; color: #1e293b; font-weight: 700; letter-spacing: 1px; user-select: none; }
+                .kan-card:hover .kan-drag-hint { color: #475569; }
             `}</style>
         </div>
     );

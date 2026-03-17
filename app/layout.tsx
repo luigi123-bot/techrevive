@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { StackProvider, StackTheme } from "@stackframe/stack";
 import { stackClientApp } from "../stack/client";
+import StyledJsxRegistry from "./StyledJsxRegistry";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -22,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es">
+    <html lang="es" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -35,9 +36,15 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body style={{ margin: 0, padding: 0 }}><StackProvider app={stackClientApp}><StackTheme>
-        {children}
-      </StackTheme></StackProvider></body>
+      <body style={{ margin: 0, padding: 0 }}>
+        <StyledJsxRegistry>
+          <StackProvider app={stackClientApp}>
+            <StackTheme>
+              {children}
+            </StackTheme>
+          </StackProvider>
+        </StyledJsxRegistry>
+      </body>
     </html>
   );
 }
