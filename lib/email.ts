@@ -5,18 +5,23 @@ const emailPass = (process.env.EMAIL_PASS || '').replace(/\s/g, '');
 
 const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
+    port: 587,
+    secure: false, // true para 465, false para otros puertos (como 587)
     auth: {
         user: emailUser,
         pass: emailPass,
     },
     tls: {
-        rejectUnauthorized: false
+        // Configuraciones específicas para evitar bloqueos en Vercel/Producción
+        rejectUnauthorized: false,
+        minVersion: 'TLSv1.2'
     },
-    family: 4,
-    connectionTimeout: 15000,
-    greetingTimeout: 15000,
+    // Forzamos IPv4 a nivel de DNS para evitar el error ENETUNREACH de IPv6
+    lookup: (hostname: any, options: any, callback: any) => {
+        require('dns').lookup(hostname, { family: 4 }, callback);
+    },
+    connectionTimeout: 25000,
+    greetingTimeout: 25000,
     socketTimeout: 30000
 } as any);
 
