@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { InventoryManagement } from '@/components/admin/InventoryManagement';
 
 export default function AdminDashboard() {
     const [data, setData] = useState<any>(null);
@@ -21,6 +22,9 @@ export default function AdminDashboard() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [showManualForm, setShowManualForm] = useState(false);
     const [manualRequestForm, setManualRequestForm] = useState({ name: '', email: '', phone: '', service: 'Reparación de PC o Laptop', message: '' });
+    const [inventory, setInventory] = useState<any[]>([]);
+    const [inventoryForm, setInventoryForm] = useState({ name: '', type: 'equipment', brand: '', model: '', serialNumber: '', status: 'repairing', serviceRequestId: '', ownerName: '', notes: '' });
+    const [invLoading, setInvLoading] = useState(false);
     const router = useRouter();
 
     useEffect(() => {
@@ -83,6 +87,20 @@ export default function AdminDashboard() {
         const json = await res.json();
         if (res.ok) setRequests(json);
     };
+
+    const fetchInventory = async () => {
+        setInvLoading(true);
+        try {
+            const res = await fetch('/api/inventory');
+            const json = await res.json();
+            if (res.ok) setInventory(json);
+        } catch (error) { console.error(error); }
+        finally { setInvLoading(false); }
+    };
+
+    useEffect(() => {
+        if (activeTab === 'inventory') fetchInventory();
+    }, [activeTab]);
 
     const handleUpdateRequestStatus = async (id: string, newStatus: string) => {
         // Optimistic update
@@ -242,6 +260,43 @@ export default function AdminDashboard() {
         finally { setGeneratingAI(false); }
     };
 
+    const handleSaveInventory = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setSaving(true);
+        try {
+            const res = await fetch('/api/inventory', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(inventoryForm),
+            });
+            if (res.ok) {
+                alert('Registro de inventario guardado');
+                setInventoryForm({ name: '', type: 'equipment', brand: '', model: '', serialNumber: '', status: 'repairing', serviceRequestId: '', ownerName: '', notes: '' });
+                fetchInventory();
+            }
+        } catch (error) { console.error(error); }
+        finally { setSaving(false); }
+    };
+
+    const handleDeleteInventory = async (id: string) => {
+        if (!confirm('¿Eliminar este registro del inventario?')) return;
+        try {
+            const res = await fetch(`/api/inventory?id=${id}`, { method: 'DELETE' });
+            if (res.ok) fetchInventory();
+        } catch (error) { console.error(error); }
+    };
+
+    const handleUpdateInventoryStatus = async (id: string, newStatus: string) => {
+        try {
+            const res = await fetch('/api/inventory', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, status: newStatus }),
+            });
+            if (res.ok) fetchInventory();
+        } catch (error) { console.error(error); }
+    };
+
     const logout = () => {
         localStorage.removeItem('user');
         router.push('/login');
@@ -284,6 +339,9 @@ export default function AdminDashboard() {
                     <button className={activeTab === 'services' ? 'active' : ''} onClick={() => { setActiveTab('services'); setIsMobileMenuOpen(false); }}>
                         <span className="nav-icon">🔧</span> Servicios
                     </button>
+                    <button className={activeTab === 'inventory' ? 'active' : ''} onClick={() => { setActiveTab('inventory'); setIsMobileMenuOpen(false); }}>
+                        <span className="nav-icon">📦</span> Inventario
+                    </button>
                     <button className={activeTab === 'metrics' ? 'active' : ''} onClick={() => { setActiveTab('metrics'); setIsMobileMenuOpen(false); }}>
                         <span className="nav-icon">📈</span> Métricas
                     </button>
@@ -313,7 +371,8 @@ export default function AdminDashboard() {
                                 activeTab === 'overview' ? 'Vista General' :
                                     activeTab === 'users' ? 'Gestión de Usuarios' :
                                         activeTab === 'requests' ? 'Solicitudes de Servicio' :
-                                            activeTab === 'services' ? 'Configuración de Servicios' : 'Web Metrics'
+                                            activeTab === 'services' ? 'Configuración de Servicios' : 
+                                                activeTab === 'inventory' ? 'Inventario y Equipos' : 'Web Metrics'
                             }</h2>
                             <p className="breadcrumb">TechRevive Admin / {activeTab}</p>
                         </div>
@@ -584,6 +643,11 @@ export default function AdminDashboard() {
                                                                 🔧 {req.service}
                                                             </div>
                                                             {req.phone && <div className="kan-phone">📱 {req.phone}</div>}
+                                                            {inventory.some(inv => inv.serviceRequestId === req._id) && (
+                                                                <div className="kan-inventory-indicator">
+                                                                    💼 Equipo en Inventario
+                                                                </div>
+                                                            )}
                                                             <p className="kan-msg">{req.message}</p>
                                                             <div className="kan-footer">
                                                                 <span className="kan-date">{new Date(req.createdAt).toLocaleDateString('es', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
@@ -599,6 +663,20 @@ export default function AdminDashboard() {
                             </div>
                         );
                     })()}
+
+                    {activeTab === 'inventory' && (
+                        <InventoryManagement 
+                            requests={requests}
+                            inventory={inventory}
+                            fetchInventory={fetchInventory}
+                            handleSaveInventory={handleSaveInventory}
+                            handleDeleteInventory={handleDeleteInventory}
+                            handleUpdateInventoryStatus={handleUpdateInventoryStatus}
+                            inventoryForm={inventoryForm}
+                            setInventoryForm={setInventoryForm}
+                            invLoading={invLoading}
+                        />
+                    )}
 
                     {activeTab === 'services' && (
                         <div className="services-admin-master">
@@ -863,9 +941,14 @@ export default function AdminDashboard() {
                 .n-sub { font-size: 12px; color: #64748b; }
 
                 .badge { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; text-transform: uppercase; }
-                .badge.pending { background: rgba(250, 204, 21, 0.1); color: #facc15; }
-                .badge.completed { background: rgba(0, 255, 136, 0.1); color: #00ff88; }
+                .badge.pending, .badge.repairing { background: rgba(250, 204, 21, 0.1); color: #facc15; border: 1px solid rgba(250, 204, 21, 0.2); }
+                .badge.contacted, .badge.available { background: rgba(0, 168, 255, 0.1); color: #00a8ff; border: 1px solid rgba(0, 168, 255, 0.2); }
+                .badge.in_progress { background: rgba(168, 85, 247, 0.1); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.2); }
+                .badge.completed, .badge.delivered { background: rgba(0, 255, 136, 0.1); color: #00ff88; border: 1px solid rgba(0, 255, 136, 0.2); }
+                .badge.cancelled, .badge.broken { background: rgba(255, 51, 102, 0.1); color: #ff3366; border: 1px solid rgba(255, 51, 102, 0.2); }
 
+                /* INVENTORY MODERN UI REMOVED - NOW USING SHADCN + TAILWIND */
+                
                 .user-feed { display: flex; flex-direction: column; gap: 16px; }
                 .u-feed-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(255,255,255,0.02); border-radius: 12px; transition: 0.3s; }
                 .u-avatar { width: 36px; height: 36px; background: #1e293b; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #00a8ff; }
@@ -970,6 +1053,32 @@ export default function AdminDashboard() {
                 .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0, 168, 255, 0.4); }
 
                 .s-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 24px; }
+                /* Item Rows (New Compact List) */
+                .inventory-list-rows { display: flex; flex-direction: column; gap: 10px; }
+                .inventory-row-item { background: #050810; border: 1px solid rgba(255,255,255,0.04); border-radius: 14px; padding: 12px 20px; display: grid; grid-template-columns: 2fr 1fr 1.5fr 1fr 40px; align-items: center; gap: 20px; transition: 0.2s; }
+                @media (max-width: 900px) { .inventory-row-item { grid-template-columns: 1.5fr 1fr 1fr 40px; gap: 10px; } .hide-mobile { display: none; } }
+                @media (max-width: 600px) { .inventory-row-item { grid-template-columns: 1fr 1fr; } .row-actions { justify-self: end; } }
+
+                .inventory-row-item:hover { background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.1); }
+                
+                .row-main-info { display: flex; align-items: center; gap: 15px; }
+                .row-icon { font-size: 20px; width: 40px; height: 40px; background: rgba(255,255,255,0.03); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+                .row-text { display: flex; flex-direction: column; }
+                .row-name { font-weight: 800; color: #fff; font-size: 14px; }
+                .row-subtext { font-size: 11px; color: #64748b; font-weight: 600; text-transform: uppercase; }
+
+                .row-meta { display: flex; flex-direction: column; gap: 2px; }
+                .meta-label { font-size: 10px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.5px; }
+                .meta-val { font-size: 12px; color: #f1f5f9; font-weight: 700; }
+
+                .row-select-pill { background: #03060c; border: 1px solid rgba(255,255,255,0.08); padding: 8px 12px; border-radius: 10px; color: #fff; font-size: 11px; font-weight: 800; text-transform: uppercase; cursor: pointer; outline: none; }
+                .row-select-pill.repairing { border-color: #facc15; color: #facc15; }
+                .row-select-pill.available { border-color: #00ff88; color: #00ff88; }
+                .row-select-pill.delivered { border-color: #00a8ff; color: #00a8ff; }
+                .row-select-pill.broken { border-color: #ff3366; color: #ff3366; }
+
+                .btn-row-del { background: none; border: none; font-size: 14px; opacity: 0.3; cursor: pointer; transition: 0.2s; }
+                .btn-row-del:hover { opacity: 1; transform: scale(1.2); }
                 .s-mini-card { background: #03060c; padding: 16px; border-radius: 16px; display: flex; align-items: center; gap: 16px; border: 1px solid transparent; transition: 0.3s; }
                 .s-mini-card:hover { border-color: rgba(0, 168, 255, 0.2); transform: scale(1.02); }
                 .s-icon-box { width: 44px; height: 44px; background: rgba(255,255,255,0.02); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
@@ -1010,15 +1119,18 @@ export default function AdminDashboard() {
                 @media (max-width: 1024px) {
                     .admin-layout { grid-template-columns: 1fr; }
                     .sidebar { position: fixed; left: -280px; z-index: 1000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 20px 0 50px rgba(0,0,0,0.5); }
-                    .sidebar.open { left: 0; }
+                    .admin-layout.sidebar-open .sidebar { left: 0; }
                     .sidebar-overlay { display: block; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 999; }
-                    .main-content { padding: 20px; }
-                    .mobile-menu-btn { display: flex; flex-direction: column; gap: 4px; border: none; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; cursor: pointer; }
+                    .main-content { padding: 80px 20px 40px; }
+                    .mobile-menu-btn { display: flex; flex-direction: column; gap: 4px; border: none; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; cursor: pointer; margin-right: 15px; }
                     .mobile-menu-btn span { width: 20px; height: 2px; background: #00a8ff; border-radius: 2px; }
-                    .h-left { display: flex; align-items: center; gap: 15px; }
+                    .h-left { display: flex; align-items: center; }
                     .h-left h2 { font-size: 20px; }
                     .hide-mobile { display: none; }
                     .btn-view-site, .btn-logout { padding: 10px; min-width: 40px; justify-content: center; }
+                    
+                    .inventory-grid { gap: 20px; }
+                    .inventory-form-card { position: relative; top: 0; }
                 }
 
                 @media (max-width: 768px) {
@@ -1029,16 +1141,25 @@ export default function AdminDashboard() {
                     .form-row { grid-template-columns: 1fr; }
                     .services-admin-master { grid-template-columns: 1fr; }
                     
-                    /* Hacer tablas scrollables horizontalmente */
-                    .full-view-card { overflow-x: auto; }
-                    table { min-width: 600px; }
-
+                    .main-header { flex-direction: column; align-items: flex-start; gap: 20px; margin-bottom: 30px; }
+                    .h-right { width: 100%; justify-content: space-between; }
+                    
+                    .form-row-three { grid-template-columns: 1fr; }
                     .h-left h2 { font-size: 18px; }
                     .breadcrumb { font-size: 11px; }
+                    
+                    .main-content { padding-top: 20px; }
                 }
-                
+
                 .mobile-menu-btn { display: none; }
-                .sidebar-overlay { display: none; }
+                .sidebar-overlay { 
+                    display: none; 
+                    position: fixed; 
+                    inset: 0; 
+                    background: rgba(0,0,0,0.5); 
+                    z-index: 998; 
+                }
+                .admin-layout.sidebar-open .sidebar-overlay { display: block; }
 
                 /* ===== KANBAN BOARD ===== */
                 .kanban-board { display: flex; flex-direction: column; gap: 24px; }
@@ -1082,6 +1203,7 @@ export default function AdminDashboard() {
 
                 .kan-service-tag { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; border: 1px solid; display: inline-block; align-self: flex-start; }
                 .kan-phone { font-size: 11px; color: #64748b; }
+                .kan-inventory-indicator { font-size: 10px; font-weight: 800; color: #00ff88; background: rgba(0,255,136,0.06); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(0,255,136,0.2); margin-top: 4px; display: inline-flex; align-items: center; gap: 4px; }
                 .kan-msg { font-size: 12px; color: #94a3b8; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
                 .kan-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.04); }
                 .kan-date { font-size: 10px; color: #475569; font-weight: 600; }
