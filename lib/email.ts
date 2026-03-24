@@ -3,7 +3,6 @@ import nodemailer from 'nodemailer';
 const emailUser = process.env.EMAIL_USER || '';
 const emailPass = (process.env.EMAIL_PASS || '').replace(/\s/g, '');
 
-// Configure Transporter with DNS/IPv4 fix for Coolify/Production
 const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 587,
@@ -16,7 +15,7 @@ const transporter = nodemailer.createTransport({
         rejectUnauthorized: false,
         minVersion: 'TLSv1.2'
     },
-    // Forzamos IPv4 a nivel de DNS para evitar el error ENETUNREACH de IPv6 en Docker/Coolify
+    // Forzamos IPv4 a nivel de DNS para evitar el error ENETUNREACH de IPv6
     lookup: (hostname: any, options: any, callback: any) => {
         require('dns').lookup(hostname, { family: 4 }, callback);
     },

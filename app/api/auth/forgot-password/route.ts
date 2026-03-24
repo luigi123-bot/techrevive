@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
-import nodemailer from 'nodemailer';
+import FormData from 'form-data';
+import Mailgun from 'mailgun.js';
 
 export async function POST(req: NextRequest) {
     try {
@@ -29,55 +30,40 @@ export async function POST(req: NextRequest) {
         user.resetPasswordExpire = resetExpire;
         await user.save();
 
-        // Configure Nodemailer with IPv4 Fix for Coolify/Production
-        const emailUser = process.env.EMAIL_USER || '';
-        const emailPass = (process.env.EMAIL_PASS || '').replace(/\s/g, '');
+        // Configure Mailgun API
+        const mailgun = new Mailgun(FormData);
+        const mg = mailgun.client({
+            username: "api",
+            key: process.env.MAILGUN_API_KEY || process.env.API_KEY || "",
+        });
 
-        const transporter = nodemailer.createTransport({
-            host: "smtp.gmail.com",
-            port: 587,
-            secure: false,
-            auth: {
-                user: emailUser,
-                pass: emailPass,
-            },
-            tls: {
-                rejectUnauthorized: false,
-                minVersion: 'TLSv1.2'
-            },
-            // Forzamos IPv4 a nivel de DNS para evitar el error ENETUNREACH de IPv6
-            lookup: (hostname: any, options: any, callback: any) => {
-                require('dns').lookup(hostname, { family: 4 }, callback);
-            },
-            connectionTimeout: 25000,
-            greetingTimeout: 25000,
-            socketTimeout: 30000
-        } as any);
-
-        const mailOptions = {
-            from: `"TechRevive Support" <${emailUser}>`,
-            to: user.email,
-            subject: 'Código de Recuperación de Contraseña - TechRevive',
-            html: `
-                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
-                    <h2 style="color: #00a8ff; text-align: center;">Recuperación de Contraseña</h2>
-                    <p>Has solicitado restablecer tu contraseña en <strong>TechRevive</strong>.</p>
-                    <p>Usa el siguiente código para completar el proceso. Este código expira en 10 minutos:</p>
-                    <div style="background-color: #f5f5f5; padding: 15px; text-align: center; font-size: 24px; font-weight: bold; letter-spacing: 5px; color: #333; border-radius: 5px; margin: 20px 0;">
-                        ${resetCode}
-                    </div>
-                    <p>Si no solicitaste esto, puedes ignorar este correo de forma segura.</p>
-                    <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-                    <p style="font-size: 12px; color: #888; text-align: center;">© 2025 TechRevive Systems. Seguridad y Rendimiento.</p>
+        const htmlContent = `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
+                <h2 style="color: #00a8ff; text-align: center;">Recuperación de Contraseña</h2>
+                <p>Has solicitado restablecer tu contraseña en <strong>TechRevive</strong>.</p>
+                <p>Usa el siguiente código para completar el proceso. Este código expira en 10 minutos:</p>
+                <div style="background-color: #f5f5f5; padding: 15px; text-align: center; font-size: 24px; font-weight: bold; letter-spacing: 5px; color: #333; border-radius: 5px; margin: 20px 0;">
+                    ${resetCode}
                 </div>
-            `,
-        };
+                <p>Si no solicitaste esto, puedes ignorar este correo de forma segura.</p>
+                <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+                <p style="font-size: 12px; color: #888; text-align: center;">© 2025 TechRevive Systems. Seguridad y Rendimiento.</p>
+            </div>
+        `;
 
-        await transporter.sendMail(mailOptions);
+        const mailgunDomain = process.env.MAILGUN_DOMAIN || "techrevive.privatech.me";
+
+        await mg.messages.create(mailgunDomain, {
+            from: `TechRevive Support <postmaster@${mailgunDomain}>`,
+            to: [user.email],
+            subject: 'Código de Recuperación de Contraseña - TechRevive',
+            text: `Has solicitado restablecer tu contraseña. Tu código es: ${resetCode}`,
+            html: htmlContent,
+        });
 
         return NextResponse.json({ success: true, message: 'Código enviado exitosamente' });
     } catch (error) {
-        console.error('Forgot password error:', error);
+        console.error('Forgot password fatal error:', error);
         return NextResponse.json({ error: 'Error al enviar el correo' }, { status: 500 });
     }
 }
