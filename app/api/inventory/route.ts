@@ -26,6 +26,12 @@ export async function POST(req: NextRequest) {
     try {
         await dbConnect();
         const data = await req.json();
+        
+        // Limpiar campos vacíos que causan errores de validación en Mongoose (CastError)
+        if (data.serviceRequestId === "" || data.serviceRequestId === "none") {
+            delete data.serviceRequestId;
+        }
+
         const newItem = await InventoryItem.create(data);
 
         // Si el ítem está vinculado a una solicitud, actualizamos el estado de la solicitud

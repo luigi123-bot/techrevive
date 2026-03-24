@@ -63,8 +63,8 @@ export function InventoryManagement({
                 <Card className="lg:col-span-1 border-white/5 bg-[#0b1120]">
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2 text-white text-lg">
-                            <Package className="w-5 h-5 text-blue-400" />
-                            Registrar Ingreso
+                            <Package className="w-5 h-5 text-emerald-400" />
+                            Nuevo Producto en Stock
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -92,43 +92,13 @@ export function InventoryManagement({
                             </div>
 
                             <div className="space-y-2">
-                                <Label className="text-slate-400 text-xs text-left">S/N</Label>
-                                <Input className="bg-[#03060c] border-white/10 text-white h-11" value={inventoryForm.serialNumber} onChange={e => setInventoryForm({ ...inventoryForm, serialNumber: e.target.value })} />
+                                <Label className="text-slate-400 text-xs text-left">S/N / Código de Barras</Label>
+                                <Input className="bg-[#03060c] border-white/10 text-white h-11" placeholder="Ej: SN-123456" value={inventoryForm.serialNumber} onChange={e => setInventoryForm({ ...inventoryForm, serialNumber: e.target.value })} />
                             </div>
 
-                            <div className="space-y-2">
-                                <Label className="text-slate-400 text-xs text-left">Tipo</Label>
-                                <Select value={inventoryForm.type} onValueChange={(val) => setInventoryForm({ ...inventoryForm, type: val })}>
-                                    <SelectTrigger className="bg-[#03060c] border-white/10 text-white h-11">
-                                        <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent className="bg-[#0f172a] border-white/10 text-white">
-                                        <SelectItem value="equipment">🛠️ Equipo Cliente</SelectItem>
-                                        <SelectItem value="product">📦 Producto Stock</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
 
-                            <div className="space-y-2">
-                                <Label className="text-slate-400 text-xs text-left">Vincular Solicitud</Label>
-                                <Select value={inventoryForm.serviceRequestId} onValueChange={(val) => {
-                                    const req = requests.find(r => r._id === val);
-                                    setInventoryForm({ ...inventoryForm, serviceRequestId: val, ownerName: req?.name || '' });
-                                }}>
-                                    <SelectTrigger className="bg-[#03060c] border-white/10 text-white h-11">
-                                        <SelectValue placeholder="-- Seleccionar --" />
-                                    </SelectTrigger>
-                                    <SelectContent className="bg-[#0f172a] border-white/10 text-white">
-                                        <SelectItem value="none">Sin vinculación</SelectItem>
-                                        {requests.map(req => (
-                                            <SelectItem key={req._id} value={req._id}>{req.name} - {req.service}</SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                            </div>
-
-                            <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold h-12 mt-4" disabled={invLoading}>
-                                {invLoading ? 'Guardando...' : 'Registrar en Sistema'}
+                            <Button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold h-12 mt-4" disabled={invLoading}>
+                                {invLoading ? 'Guardando...' : 'Agregar al Stock'}
                             </Button>
                         </form>
                     </CardContent>

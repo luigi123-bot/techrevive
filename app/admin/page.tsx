@@ -3,11 +3,26 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { InventoryManagement } from '@/components/admin/InventoryManagement';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { Label } from "@/components/ui/label";
+import { User, Mail, Phone, Calendar, MessageSquare, Laptop, CheckCircle2, AlertCircle, Archive, History } from "lucide-react";
 
 export default function AdminDashboard() {
     const [data, setData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState('overview');
+    const [selectedRequest, setSelectedRequest] = useState<any>(null);
+    const [showArchived, setShowArchived] = useState(false);
     const [services, setServices] = useState<any[]>([]);
     const [serviceForm, setServiceForm] = useState({ id: '', title: '', desc: '', icon: '🔧', tags: '', color: '#00a8ff', active: true });
     const [serviceFilter, setServiceFilter] = useState('all'); // all, active, draft
@@ -23,7 +38,7 @@ export default function AdminDashboard() {
     const [showManualForm, setShowManualForm] = useState(false);
     const [manualRequestForm, setManualRequestForm] = useState({ name: '', email: '', phone: '', service: 'Reparación de PC o Laptop', message: '' });
     const [inventory, setInventory] = useState<any[]>([]);
-    const [inventoryForm, setInventoryForm] = useState({ name: '', type: 'equipment', brand: '', model: '', serialNumber: '', status: 'repairing', serviceRequestId: '', ownerName: '', notes: '' });
+    const [inventoryForm, setInventoryForm] = useState({ name: '', type: 'product', brand: '', model: '', serialNumber: '', status: 'available', serviceRequestId: '', ownerName: '', notes: '' });
     const [invLoading, setInvLoading] = useState(false);
     const router = useRouter();
 
@@ -340,7 +355,7 @@ export default function AdminDashboard() {
                         <span className="nav-icon">🔧</span> Servicios
                     </button>
                     <button className={activeTab === 'inventory' ? 'active' : ''} onClick={() => { setActiveTab('inventory'); setIsMobileMenuOpen(false); }}>
-                        <span className="nav-icon">📦</span> Inventario
+                        <span className="nav-icon">📦</span> Inventario (Stock)
                     </button>
                     <button className={activeTab === 'metrics' ? 'active' : ''} onClick={() => { setActiveTab('metrics'); setIsMobileMenuOpen(false); }}>
                         <span className="nav-icon">📈</span> Métricas
@@ -370,9 +385,9 @@ export default function AdminDashboard() {
                             <h2>{
                                 activeTab === 'overview' ? 'Vista General' :
                                     activeTab === 'users' ? 'Gestión de Usuarios' :
-                                        activeTab === 'requests' ? 'Solicitudes de Servicio' :
+                                        activeTab === 'requests' ? 'Solicitudes y Equipos Cliente' :
                                             activeTab === 'services' ? 'Configuración de Servicios' : 
-                                                activeTab === 'inventory' ? 'Inventario y Equipos' : 'Web Metrics'
+                                                activeTab === 'inventory' ? 'Inventario de Productos (Stock)' : 'Web Metrics'
                             }</h2>
                             <p className="breadcrumb">TechRevive Admin / {activeTab}</p>
                         </div>
@@ -538,18 +553,29 @@ export default function AdminDashboard() {
                     )}
 
                     {activeTab === 'requests' && (() => {
-                        const COLUMNS = [
-                            { key: 'pending',     label: 'Recibido',   emoji: '📥', color: '#facc15' },
-                            { key: 'contacted',   label: 'Contactado', emoji: '📞', color: '#00a8ff' },
-                            { key: 'in_progress', label: 'En Proceso', emoji: '⚙️',  color: '#a855f7' },
-                            { key: 'completed',   label: 'Completado', emoji: '✅', color: '#00ff88' },
-                        ];
+                        const COLUMNS = showArchived 
+                            ? [{ key: 'archived', label: 'Archivados', emoji: '📁', color: '#94a3b8' }]
+                            : [
+                                { key: 'pending',     label: 'Recibido',   emoji: '📥', color: '#facc15' },
+                                { key: 'contacted',   label: 'Contactado', emoji: '📞', color: '#00a8ff' },
+                                { key: 'in_progress', label: 'En Proceso', emoji: '⚙️',  color: '#a855f7' },
+                                { key: 'completed',   label: 'Completado', emoji: '✅', color: '#00ff88' },
+                            ];
                         return (
                             <div className="kanban-board">
                                 <div className="kanban-topbar">
-                                    <div className="k-left">
-                                        <span className="kanban-count">{requests.length} solicitudes en total</span>
+                                    <div className="k-left flex items-center gap-4">
+                                        <span className="kanban-count">{requests.filter(r => showArchived ? r.status === 'archived' : r.status !== 'archived').length} solicitudes</span>
                                         <button className="btn-refresh-kan" onClick={fetchRequests}>↻ Actualizar</button>
+                                        <Button 
+                                            variant="outline" 
+                                            size="sm" 
+                                            onClick={() => setShowArchived(!showArchived)}
+                                            className={`border-white/10 ${showArchived ? 'bg-blue-600 text-white' : 'text-slate-400'}`}
+                                        >
+                                            {showArchived ? <History className="w-4 h-4 mr-2" /> : <Archive className="w-4 h-4 mr-2" />}
+                                            {showArchived ? 'Ver Activos' : 'Ver Archivados'}
+                                        </Button>
                                     </div>
                                     <button className="btn-new-request" onClick={() => setShowManualForm(!showManualForm)}>
                                         {showManualForm ? '✕ Cancelar' : '➕ Nueva Solicitud'}
@@ -560,8 +586,8 @@ export default function AdminDashboard() {
                                     <div className="manual-request-form-overlay">
                                         <section className="full-view-card manual-card">
                                             <div className="view-header">
-                                                <h3>Nueva Solicitud Manual (Registro)</h3>
-                                                <p>Registra una solicitud recibida por otros medios aquí.</p>
+                                                <h3>Nueva Solicitud de Servicio / Ingreso de Equipo</h3>
+                                                <p>Registra ingresos de equipos para reparación o solicitudes de clientes aquí.</p>
                                             </div>
                                             <form onSubmit={handleCreateManualRequest} className="fancy-form">
                                                 <div className="input-group">
@@ -630,6 +656,7 @@ export default function AdminDashboard() {
                                                             draggable
                                                             onDragStart={e => handleDragStart(e, req._id)}
                                                             onDragEnd={handleDragEnd}
+                                                            onClick={() => setSelectedRequest(req)}
                                                         >
                                                             <div className="kan-card-top">
                                                                 <div className="kan-avatar">{req.name?.[0]?.toUpperCase()}</div>
@@ -660,6 +687,142 @@ export default function AdminDashboard() {
                                         );
                                     })}
                                 </div>
+
+                                {/* Modal de Detalles de Solicitud */}
+                                <Dialog open={!!selectedRequest} onOpenChange={(open) => !open && setSelectedRequest(null)}>
+                                    <DialogContent className="sm:max-w-[600px] bg-[#0b1120] border-white/10 text-white">
+                                        <DialogHeader>
+                                            <DialogTitle className="text-xl flex items-center gap-2">
+                                                <Badge className={`uppercase text-[10px] ${
+                                                    selectedRequest?.status === 'pending' ? 'bg-yellow-500/20 text-yellow-500 border-yellow-500/50' :
+                                                    selectedRequest?.status === 'contacted' ? 'bg-blue-500/20 text-blue-500 border-blue-500/50' :
+                                                    selectedRequest?.status === 'in_progress' ? 'bg-purple-500/20 text-purple-500 border-purple-500/50' :
+                                                    selectedRequest?.status === 'archived' ? 'bg-slate-500/20 text-slate-400 border-slate-500/50' :
+                                                    'bg-green-500/20 text-green-500 border-green-500/50'
+                                                }`}>
+                                                    {selectedRequest?.status === 'pending' ? 'Recibido' :
+                                                     selectedRequest?.status === 'contacted' ? 'Contactado' :
+                                                     selectedRequest?.status === 'in_progress' ? 'En Proceso' : 
+                                                     selectedRequest?.status === 'archived' ? 'Archivado' : 'Completado'}
+                                                </Badge>
+                                                Detalles de la Solicitud
+                                            </DialogTitle>
+                                            <div className="flex gap-2 ml-auto">
+                                                {selectedRequest?.status !== 'archived' ? (
+                                                    <Button 
+                                                        size="sm" 
+                                                        variant="outline" 
+                                                        className="h-8 border-white/10 text-slate-400 hover:text-white"
+                                                        onClick={() => {
+                                                            handleUpdateRequestStatus(selectedRequest._id, 'archived');
+                                                            setSelectedRequest(null);
+                                                        }}
+                                                    >
+                                                        <Archive className="w-3.5 h-3.5 mr-2" /> Archivar
+                                                    </Button>
+                                                ) : (
+                                                    <Button 
+                                                        size="sm" 
+                                                        variant="outline" 
+                                                        className="h-8 border-white/10 text-slate-400 hover:text-white"
+                                                        onClick={() => {
+                                                            handleUpdateRequestStatus(selectedRequest._id, 'pending');
+                                                            setSelectedRequest(null);
+                                                        }}
+                                                    >
+                                                        <History className="w-3.5 h-3.5 mr-2" /> Restaurar
+                                                    </Button>
+                                                )}
+                                            </div>
+                                            <DialogDescription className="text-slate-400">
+                                                Información detallada del cliente y el servicio requerido.
+                                            </DialogDescription>
+                                        </DialogHeader>
+
+                                        <div className="grid gap-6 py-4">
+                                            {/* Sección Cliente */}
+                                            <div className="space-y-4">
+                                                <h4 className="text-sm font-bold text-blue-400 uppercase tracking-wider flex items-center gap-2">
+                                                    <User className="w-4 h-4" /> Información del Cliente
+                                                </h4>
+                                                <div className="grid grid-cols-2 gap-4 bg-[#03060c] p-4 rounded-xl border border-white/5">
+                                                    <div className="space-y-1">
+                                                        <Label className="text-[10px] text-slate-500 uppercase">Nombre</Label>
+                                                        <p className="text-sm font-medium">{selectedRequest?.name}</p>
+                                                    </div>
+                                                    <div className="space-y-1">
+                                                        <Label className="text-[10px] text-slate-500 uppercase">Fecha</Label>
+                                                        <p className="text-sm font-medium flex items-center gap-1">
+                                                            <Calendar className="w-3 h-3 text-slate-400" />
+                                                            {selectedRequest?.createdAt && new Date(selectedRequest.createdAt).toLocaleDateString()}
+                                                        </p>
+                                                    </div>
+                                                    <div className="space-y-1">
+                                                        <Label className="text-[10px] text-slate-500 uppercase">Correo</Label>
+                                                        <p className="text-sm font-medium flex items-center gap-2">
+                                                            <Mail className="w-3 h-3 text-slate-400" />
+                                                            {selectedRequest?.email}
+                                                        </p>
+                                                    </div>
+                                                    <div className="space-y-1">
+                                                        <Label className="text-[10px] text-slate-500 uppercase">Teléfono</Label>
+                                                        <p className="text-sm font-medium flex items-center gap-2">
+                                                            <Phone className="w-3 h-3 text-slate-400" />
+                                                            {selectedRequest?.phone || 'No registrado'}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Sección Servicio */}
+                                            <div className="space-y-4">
+                                                <h4 className="text-sm font-bold text-purple-400 uppercase tracking-wider flex items-center gap-2">
+                                                    <Laptop className="w-4 h-4" /> Detalles del Servicio
+                                                </h4>
+                                                <div className="bg-[#03060c] p-4 rounded-xl border border-white/5 space-y-3">
+                                                    <div className="flex justify-between items-center">
+                                                        <span className="text-sm font-bold text-white">{selectedRequest?.service}</span>
+                                                        <span className="text-[10px] text-slate-500 font-mono">ID: {selectedRequest?._id?.slice(-6)}</span>
+                                                    </div>
+                                                    <Separator className="bg-white/5" />
+                                                    <div className="space-y-2 text-left">
+                                                        <Label className="text-[10px] text-slate-500 uppercase flex items-center gap-1 text-left">
+                                                            <MessageSquare className="w-3 h-3" /> Mensaje / Notas del Cliente
+                                                        </Label>
+                                                        <p className="text-sm text-slate-300 leading-relaxed bg-white/5 p-3 rounded-lg border border-white/5 text-left">
+                                                            {selectedRequest?.message}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Equipos Vinculados */}
+                                            {inventory.filter(inv => inv.serviceRequestId === selectedRequest?._id).length > 0 && (
+                                                <div className="space-y-4">
+                                                    <h4 className="text-sm font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2">
+                                                        <CheckCircle2 className="w-4 h-4" /> Equipos Relacionados
+                                                    </h4>
+                                                    <div className="space-y-2">
+                                                        {inventory.filter(inv => inv.serviceRequestId === selectedRequest?._id).map(item => (
+                                                            <div key={item._id} className="flex items-center justify-between bg-emerald-500/5 border border-emerald-500/20 p-3 rounded-xl">
+                                                                <div className="flex items-center gap-3">
+                                                                    <div className="p-2 bg-emerald-500/10 rounded-lg text-emerald-500">
+                                                                        <Laptop className="w-4 h-4" />
+                                                                    </div>
+                                                                    <div className="text-left">
+                                                                        <p className="text-xs font-bold text-white">{item.name}</p>
+                                                                        <p className="text-[10px] text-slate-500 font-mono">{item.brand} {item.model} - S/N: {item.serialNumber}</p>
+                                                                    </div>
+                                                                </div>
+                                                                <Badge className="bg-emerald-500 text-white text-[9px]">{item.status}</Badge>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </DialogContent>
+                                </Dialog>
                             </div>
                         );
                     })()}

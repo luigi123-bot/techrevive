@@ -49,7 +49,7 @@ export async function PATCH(req: NextRequest) {
             return NextResponse.json({ error: 'ID y status son requeridos' }, { status: 400 });
         }
 
-        const validStatuses = ['pending', 'contacted', 'in_progress', 'completed', 'cancelled'];
+        const validStatuses = ['pending', 'contacted', 'in_progress', 'completed', 'cancelled', 'archived'];
         if (!validStatuses.includes(status)) {
             return NextResponse.json({ error: 'Status inválido' }, { status: 400 });
         }
