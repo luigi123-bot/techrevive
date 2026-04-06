@@ -14,12 +14,16 @@ type ApiMessage = {
     parts: Array<{ text: string }>;
 };
 
-const WELCOME_MESSAGE: Message = {
-    id: 'welcome',
-    role: 'model',
-    text: '¡Hola! 👋 Soy **TechBot**, el asistente técnico de TechRevive. Tengo más de 10 años resolviendo problemas de PCs y laptops.\n\n¿En qué puedo ayudarte hoy? Cuéntame qué le pasa a tu equipo. 🔧',
-    timestamp: new Date(),
-};
+const WELCOME_MESSAGE_TEXT = '¡Hola! 👋 Soy **TechBot**, el asistente técnico de TechRevive. Tengo más de 10 años resolviendo problemas de PCs y laptops.\n\n¿En qué puedo ayudarte hoy? Cuéntame qué le pasa a tu equipo. 🔧';
+
+function makeWelcomeMessage(): Message {
+    return {
+        id: 'welcome',
+        role: 'model',
+        text: WELCOME_MESSAGE_TEXT,
+        timestamp: new Date(),
+    };
+}
 
 const QUICK_REPLIES = [
     '💻 Mi laptop no enciende',
@@ -39,12 +43,15 @@ function formatText(text: string) {
 
 export default function ChatBot() {
     const [open, setOpen] = useState(false);
-    const [messages, setMessages] = useState<Message[]>([WELCOME_MESSAGE]);
+    const [messages, setMessages] = useState<Message[]>(() => [makeWelcomeMessage()]);
     const [input, setInput] = useState('');
     const [loading, setLoading] = useState(false);
     const [showQuickReplies, setShowQuickReplies] = useState(true);
+    const [mounted, setMounted] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => { setMounted(true); }, []);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -188,7 +195,7 @@ export default function ChatBot() {
                                 <div className="bubble">
                                     <span dangerouslySetInnerHTML={{ __html: formatText(msg.text) }} />
                                 </div>
-                                <div className="timestamp">{formatTime(msg.timestamp)}</div>
+                                <div className="timestamp">{mounted ? formatTime(msg.timestamp) : ''}</div>
                             </div>
                         </div>
                     ))}
@@ -250,11 +257,11 @@ export default function ChatBot() {
             <style jsx>{`
                 .trigger-btn {
                     position: fixed;
-                    bottom: 28px;
+                    bottom: 100px;
                     right: 28px;
                     z-index: 9999;
-                    width: 60px;
-                    height: 60px;
+                    width: 56px;
+                    height: 56px;
                     border-radius: 50%;
                     background: linear-gradient(135deg, #00a8ff, #0055cc);
                     border: none;
@@ -287,7 +294,7 @@ export default function ChatBot() {
 
                 .unread-badge {
                     position: fixed;
-                    bottom: 78px;
+                    bottom: 162px;
                     right: 20px;
                     z-index: 9998;
                     background: #00a8ff;
@@ -303,7 +310,7 @@ export default function ChatBot() {
 
                 .chat-window {
                     position: fixed;
-                    bottom: 102px;
+                    bottom: 170px;
                     right: 28px;
                     z-index: 9998;
                     width: 380px;

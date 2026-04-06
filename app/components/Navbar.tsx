@@ -15,6 +15,7 @@ export default function Navbar() {
     const [user, setUser] = useState<User | null>(null);
     const [scrolled, setScrolled] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
+    const [mounted, setMounted] = useState(false);
     const router = useRouter();
 
     useEffect(() => {
@@ -30,6 +31,7 @@ export default function Navbar() {
             }
         }
 
+        setMounted(true);
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
 
@@ -68,7 +70,7 @@ export default function Navbar() {
                     <a key={l.href} href={l.href} className="nav-link">{l.label}</a>
                 ))}
 
-                {user ? (
+                {mounted && (user ? (
                     <div className="user-profile">
                         <div className="user-avatar">
                             {(user.name || user.email || '?').charAt(0)}
@@ -80,6 +82,11 @@ export default function Navbar() {
                     </div>
                 ) : (
                     <Link href="/login" className="login-link">Ingreso</Link>
+                ))}
+                {mounted && user?.role === 'admin' && (
+                    <Link href="/admin" className="admin-btn">
+                        <span>⚙️</span> Panel Admin
+                    </Link>
                 )}
                 <a href="#contacto" className="nav-cta">Contáctanos</a>
             </div>
@@ -101,18 +108,27 @@ export default function Navbar() {
                         <a key={l.href} href={l.href} className="nav-link"
                             onClick={() => setMenuOpen(false)}>{l.label}</a>
                     ))}
-                    {user ? (
+                    {mounted && user ? (
                         <>
                             <span className="user-name-mobile">{user.name}</span>
+                            {user.role === 'admin' && (
+                                <Link
+                                    href="/admin"
+                                    className="admin-btn-mobile"
+                                    onClick={() => setMenuOpen(false)}
+                                >
+                                    ⚙️ Panel Admin
+                                </Link>
+                            )}
                             <button
                                 onClick={() => { handleSignOut(); setMenuOpen(false); }}
                                 className="sign-out-btn-mobile"
                             >Salir</button>
                         </>
-                    ) : (
+                    ) : mounted ? (
                         <Link href="/login" className="nav-link"
                             onClick={() => setMenuOpen(false)}>Ingreso</Link>
-                    )}
+                    ) : null}
                     <a href="#contacto" className="nav-cta" style={{ textAlign: 'center' }}
                         onClick={() => setMenuOpen(false)}>Contáctanos</a>
                 </div>
@@ -312,6 +328,49 @@ export default function Navbar() {
                     font-size: 15px;
                     padding: 8px 12px;
                     cursor: pointer;
+                }
+
+                .admin-btn {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 6px;
+                    background: linear-gradient(135deg, rgba(0,168,255,0.15), rgba(0,85,204,0.15));
+                    border: 1px solid rgba(0,168,255,0.4);
+                    color: #00a8ff;
+                    padding: 8px 16px;
+                    border-radius: 10px;
+                    font-size: 13px;
+                    font-weight: 700;
+                    text-decoration: none;
+                    transition: all 0.25s ease;
+                    white-space: nowrap;
+                }
+
+                .admin-btn:hover {
+                    background: linear-gradient(135deg, #00a8ff, #0055cc);
+                    color: #fff;
+                    border-color: #00a8ff;
+                    transform: translateY(-2px);
+                    box-shadow: 0 6px 20px rgba(0,168,255,0.35);
+                }
+
+                .admin-btn-mobile {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    background: linear-gradient(135deg, rgba(0,168,255,0.1), rgba(0,85,204,0.1));
+                    border: 1px solid rgba(0,168,255,0.3);
+                    color: #00a8ff;
+                    padding: 12px 16px;
+                    border-radius: 10px;
+                    font-size: 15px;
+                    font-weight: 700;
+                    text-decoration: none;
+                    transition: all 0.2s;
+                }
+
+                .admin-btn-mobile:hover {
+                    background: rgba(0,168,255,0.2);
                 }
 
                 @media (max-width: 768px) {
