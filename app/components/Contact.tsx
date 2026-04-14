@@ -583,23 +583,46 @@ export default function Contact() {
                     box-shadow: 0 4px 15px rgba(0, 168, 255, 0.3);
                 }
 
-                .submit-btn:hover {
-                    transform: translateY(-2px);
-                    box-shadow: 0 6px 20px rgba(0, 168, 255, 0.5);
-                }
-
-                @media (max-width: 900px) {
+                @media (max-width: 992px) {
                     .contact-grid {
                         grid-template-columns: 1fr;
+                        gap: 40px;
+                    }
+                    .contact-section {
+                        padding: 60px 0;
+                    }
+                }
+
+                @media (max-width: 768px) {
+                    .section-title {
+                        font-size: 28px;
+                    }
+                    .section-subtitle {
+                        font-size: 14px;
+                        margin-top: 15px;
+                    }
+                    .form-container {
+                        padding: 30px 20px;
                     }
                 }
 
                 @media (max-width: 600px) {
                     .form-row {
                         grid-template-columns: 1fr;
+                        gap: 0;
                     }
-                    .form-container {
-                        padding: 30px 20px;
+                    .whatsapp-cta {
+                        padding: 16px;
+                    }
+                    .whatsapp-icon-box {
+                        width: 44px;
+                        height: 44px;
+                    }
+                    .whatsapp-label {
+                        font-size: 14px;
+                    }
+                    .whatsapp-sub {
+                        font-size: 11px;
                     }
                 }
             `}</style>

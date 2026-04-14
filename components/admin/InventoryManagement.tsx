@@ -86,69 +86,69 @@ export function InventoryManagement({
     };
 
     return (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6 w-full max-w-full overflow-hidden">
             {/* ── Stats Cards ── */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                <div className="group relative overflow-hidden rounded-2xl border border-white/5 bg-[#0b1120] p-5 transition-all hover:border-blue-500/20 hover:-translate-y-1">
-                    <div className="absolute top-0 right-0 w-20 h-20 bg-blue-500/5 rounded-full -translate-y-1/2 translate-x-1/2" />
-                    <div className="flex items-center gap-3 mb-3">
-                        <div className="p-2 rounded-xl bg-blue-500/10 border border-blue-500/20">
-                            <Monitor className="w-4 h-4 text-blue-400" />
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 w-full">
+                <div className="group relative overflow-hidden rounded-2xl border border-white/5 bg-[#0b1120] p-4 sm:p-5 transition-all hover:border-blue-500/20">
+                    <div className="absolute top-0 right-0 w-16 h-16 bg-blue-500/5 rounded-full -translate-y-1/2 translate-x-1/2" />
+                    <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+                        <div className="p-1.5 sm:p-2 rounded-xl bg-blue-500/10 border border-blue-500/20">
+                            <Monitor className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-400" />
                         </div>
-                        <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Total</span>
+                        <span className="text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-wider">Total</span>
                     </div>
-                    <div className="text-3xl font-black text-white tracking-tight" style={{ fontFamily: "'Orbitron', sans-serif" }}>{stats.total}</div>
+                    <div className="text-2xl sm:text-3xl font-black text-white tracking-tight" style={{ fontFamily: "'Orbitron', sans-serif" }}>{stats.total}</div>
                 </div>
 
-                <div className="group relative overflow-hidden rounded-2xl border border-white/5 bg-[#0b1120] p-5 transition-all hover:border-emerald-500/20 hover:-translate-y-1">
-                    <div className="absolute top-0 right-0 w-20 h-20 bg-emerald-500/5 rounded-full -translate-y-1/2 translate-x-1/2" />
-                    <div className="flex items-center gap-3 mb-3">
-                        <div className="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
-                            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                <div className="group relative overflow-hidden rounded-2xl border border-white/5 bg-[#0b1120] p-4 sm:p-5 transition-all hover:border-emerald-500/20">
+                    <div className="absolute top-0 right-0 w-16 h-16 bg-emerald-500/5 rounded-full -translate-y-1/2 translate-x-1/2" />
+                    <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+                        <div className="p-1.5 sm:p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+                            <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" />
                         </div>
-                        <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Disponibles</span>
+                        <span className="text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-wider">Venta</span>
                     </div>
-                    <div className="text-3xl font-black text-emerald-400 tracking-tight" style={{ fontFamily: "'Orbitron', sans-serif" }}>{stats.available}</div>
+                    <div className="text-2xl sm:text-3xl font-black text-emerald-400 tracking-tight" style={{ fontFamily: "'Orbitron', sans-serif" }}>{stats.available}</div>
                 </div>
 
-                <div className="group relative overflow-hidden rounded-2xl border border-white/5 bg-[#0b1120] p-5 transition-all hover:border-amber-500/20 hover:-translate-y-1">
-                    <div className="absolute top-0 right-0 w-20 h-20 bg-amber-500/5 rounded-full -translate-y-1/2 translate-x-1/2" />
-                    <div className="flex items-center gap-3 mb-3">
-                        <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/20">
-                            <Wrench className="w-4 h-4 text-amber-400" />
+                <div className="group relative overflow-hidden rounded-2xl border border-white/5 bg-[#0b1120] p-4 sm:p-5 transition-all hover:border-amber-500/20">
+                    <div className="absolute top-0 right-0 w-16 h-16 bg-amber-500/5 rounded-full -translate-y-1/2 translate-x-1/2" />
+                    <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+                        <div className="p-1.5 sm:p-2 rounded-xl bg-amber-500/10 border border-amber-500/20">
+                            <Wrench className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" />
                         </div>
-                        <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">En Reparación</span>
+                        <span className="text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-wider">Reparación</span>
                     </div>
-                    <div className="text-3xl font-black text-amber-400 tracking-tight" style={{ fontFamily: "'Orbitron', sans-serif" }}>{stats.repairing}</div>
+                    <div className="text-2xl sm:text-3xl font-black text-amber-400 tracking-tight" style={{ fontFamily: "'Orbitron', sans-serif" }}>{stats.repairing}</div>
                 </div>
 
-                <div className="group relative overflow-hidden rounded-2xl border border-white/5 bg-[#0b1120] p-5 transition-all hover:border-rose-500/20 hover:-translate-y-1">
-                    <div className="absolute top-0 right-0 w-20 h-20 bg-rose-500/5 rounded-full -translate-y-1/2 translate-x-1/2" />
-                    <div className="flex items-center gap-3 mb-3">
-                        <div className="p-2 rounded-xl bg-rose-500/10 border border-rose-500/20">
-                            <AlertTriangle className="w-4 h-4 text-rose-400" />
+                <div className="group relative overflow-hidden rounded-2xl border border-white/5 bg-[#0b1120] p-4 sm:p-5 transition-all hover:border-rose-500/20">
+                    <div className="absolute top-0 right-0 w-16 h-16 bg-rose-500/5 rounded-full -translate-y-1/2 translate-x-1/2" />
+                    <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+                        <div className="p-1.5 sm:p-2 rounded-xl bg-rose-500/10 border border-rose-500/20">
+                            <AlertTriangle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-rose-400" />
                         </div>
-                        <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Dañados</span>
+                        <span className="text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-wider">Dañados</span>
                     </div>
-                    <div className="text-3xl font-black text-rose-400 tracking-tight" style={{ fontFamily: "'Orbitron', sans-serif" }}>{stats.broken}</div>
+                    <div className="text-2xl sm:text-3xl font-black text-rose-400 tracking-tight" style={{ fontFamily: "'Orbitron', sans-serif" }}>{stats.broken}</div>
                 </div>
             </div>
 
             {/* ── Toolbar ── */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                <div className="relative flex-1 w-full">
+            <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-3 w-full">
+                <div className="relative flex-1">
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                     <Input
-                        className="bg-[#0b1120] border-white/5 text-white h-12 pl-11 rounded-xl focus:border-blue-500/40 focus:ring-1 focus:ring-blue-500/20 placeholder:text-slate-600"
-                        placeholder="Buscar dispositivo, marca, modelo o serial..."
+                        className="bg-[#0b1120] border-white/5 text-white h-11 sm:h-12 pl-11 rounded-xl focus:border-blue-500/40 focus:ring-1 focus:ring-blue-500/20 placeholder:text-slate-600"
+                        placeholder="Buscar..."
                         value={searchTerm}
                         onChange={e => setSearchTerm(e.target.value)}
                     />
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 sm:gap-3">
                     <Select value={filterStatus} onValueChange={setFilterStatus}>
-                        <SelectTrigger className="h-12 w-[170px] bg-[#0b1120] border-white/5 text-slate-300 rounded-xl focus:border-blue-500/40">
-                            <SelectValue placeholder="Filtrar estado" />
+                        <SelectTrigger className="h-11 sm:h-12 flex-1 lg:w-[170px] bg-[#0b1120] border-white/5 text-slate-300 rounded-xl focus:border-blue-500/40">
+                            <SelectValue placeholder="Estado" />
                         </SelectTrigger>
                         <SelectContent className="bg-[#0f172a] border-white/10 text-white">
                             <SelectItem value="all">📋 Todos</SelectItem>
@@ -162,242 +162,237 @@ export function InventoryManagement({
                         variant="outline"
                         size="icon"
                         onClick={fetchInventory}
-                        className="h-12 w-12 border-white/5 bg-[#0b1120] text-slate-400 hover:text-blue-400 hover:border-blue-500/30 hover:bg-blue-500/5 rounded-xl transition-all"
+                        className="h-11 w-11 sm:h-12 sm:w-12 border-white/5 bg-[#0b1120] text-slate-400 hover:text-blue-400 rounded-xl transition-all"
                     >
                         <RefreshCcw className="w-4 h-4" />
                     </Button>
                     <Button
                         onClick={() => setShowForm(!showForm)}
-                        className={`h-12 px-5 rounded-xl font-bold text-sm gap-2 transition-all ${showForm
-                            ? 'bg-slate-700 hover:bg-slate-600 text-white'
-                            : 'bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white shadow-lg shadow-blue-500/20'
-                            }`}
+                        className={`h-11 sm:h-12 px-4 sm:px-6 rounded-xl font-bold text-sm gap-2 transition-all ${showForm
+                            ? 'bg-slate-700 text-white'
+                            : 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-500/20'
+                        }`}
                     >
                         <Plus className="w-4 h-4" />
-                        {showForm ? 'Cerrar' : 'Nuevo'}
+                        <span className="hidden sm:inline">{showForm ? 'Cerrar' : 'Nuevo'}</span>
                     </Button>
                 </div>
             </div>
 
-            {/* ── New Item Form (collapsible) ── */}
+            {/* ── New Item Form ── */}
             {showForm && (
-                <Card className="border-blue-500/20 bg-gradient-to-br from-[#0b1120] to-[#0d1630] overflow-hidden animate-in slide-in-from-top-2 duration-300">
-                    <div className="h-1 w-full bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-600" />
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-3 text-white text-lg">
-                            <div className="p-2.5 rounded-xl bg-blue-500/10 border border-blue-500/20">
-                                <Package className="w-5 h-5 text-blue-400" />
-                            </div>
-                            Registrar Nuevo Dispositivo
+                <Card className="border-blue-500/20 bg-gradient-to-br from-[#0b1120] to-[#0d1630]">
+                    <div className="h-1 w-full bg-blue-500" />
+                    <CardHeader className="p-4 sm:p-6 pb-2">
+                        <CardTitle className="flex items-center gap-2 text-white text-base">
+                            <Package className="w-4 h-4 text-blue-400" />
+                            Registrar Dispositivo
                         </CardTitle>
                     </CardHeader>
-                    <CardContent>
-                        <form onSubmit={(e) => { handleSaveInventory(e); setShowForm(false); }} className="space-y-5">
-                            <div className="space-y-2">
-                                <Label className="text-slate-400 text-xs font-bold uppercase tracking-wider">Nombre del Dispositivo</Label>
+                    <CardContent className="p-4 sm:p-6 pt-2">
+                        <form onSubmit={(e) => { handleSaveInventory(e); setShowForm(false); }} className="space-y-4">
+                            <div className="space-y-1.5">
+                                <Label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider">Nombre</Label>
                                 <Input
-                                    className="bg-[#03060c] border-white/10 text-white h-12 rounded-xl focus:border-blue-500/40 focus:ring-1 focus:ring-blue-500/20"
-                                    placeholder="Ej: MacBook Pro 2023"
+                                    className="bg-[#03060c] border-white/10 text-white h-11 rounded-xl"
+                                    placeholder="Ej: MacBook Pro"
                                     value={inventoryForm.name}
                                     onChange={e => setInventoryForm({ ...inventoryForm, name: e.target.value })}
                                     required
                                 />
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                <div className="space-y-2">
-                                    <Label className="text-slate-400 text-xs font-bold uppercase tracking-wider">Marca</Label>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                                <div className="space-y-1.5">
+                                    <Label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider">Marca</Label>
                                     <Input
-                                        className="bg-[#03060c] border-white/10 text-white h-12 rounded-xl focus:border-blue-500/40"
-                                        placeholder="Ej: Apple"
+                                        className="bg-[#03060c] border-white/10 text-white h-11 rounded-xl"
                                         value={inventoryForm.brand}
                                         onChange={e => setInventoryForm({ ...inventoryForm, brand: e.target.value })}
                                     />
                                 </div>
-                                <div className="space-y-2">
-                                    <Label className="text-slate-400 text-xs font-bold uppercase tracking-wider">Modelo</Label>
+                                <div className="space-y-1.5">
+                                    <Label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider">Modelo</Label>
                                     <Input
-                                        className="bg-[#03060c] border-white/10 text-white h-12 rounded-xl focus:border-blue-500/40"
-                                        placeholder="Ej: A2338"
+                                        className="bg-[#03060c] border-white/10 text-white h-11 rounded-xl"
                                         value={inventoryForm.model}
                                         onChange={e => setInventoryForm({ ...inventoryForm, model: e.target.value })}
                                     />
                                 </div>
-                                <div className="space-y-2">
-                                    <Label className="text-slate-400 text-xs font-bold uppercase tracking-wider">S/N o Código</Label>
+                                <div className="space-y-1.5">
+                                    <Label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider">Serial</Label>
                                     <Input
-                                        className="bg-[#03060c] border-white/10 text-white h-12 rounded-xl focus:border-blue-500/40"
-                                        placeholder="Ej: SN-123456"
+                                        className="bg-[#03060c] border-white/10 text-white h-11 rounded-xl"
                                         value={inventoryForm.serialNumber}
                                         onChange={e => setInventoryForm({ ...inventoryForm, serialNumber: e.target.value })}
                                     />
                                 </div>
+                                <div className="space-y-1.5">
+                                    <Label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider">Tipo</Label>
+                                    <Select value={inventoryForm.type} onValueChange={v => setInventoryForm({ ...inventoryForm, type: v })}>
+                                        <SelectTrigger className="bg-[#03060c] border-white/10 text-white h-11 rounded-xl">
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent className="bg-[#03060c] border-white/10 text-white">
+                                            <SelectItem value="equipment">Monitor/Equipo</SelectItem>
+                                            <SelectItem value="product">Producto/Repuesto</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div className="space-y-1.5">
+                                    <Label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider">Estado Inicial</Label>
+                                    <Select value={inventoryForm.status} onValueChange={v => setInventoryForm({ ...inventoryForm, status: v })}>
+                                        <SelectTrigger className="bg-[#03060c] border-white/10 text-white h-11 rounded-xl">
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent className="bg-[#03060c] border-white/10 text-white">
+                                            <SelectItem value="available">Disponible</SelectItem>
+                                            <SelectItem value="repairing">Reparación</SelectItem>
+                                            <SelectItem value="broken">Dañado</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
                             </div>
 
-                            <div className="flex gap-3 pt-2">
-                                <Button
-                                    type="submit"
-                                    className="flex-1 bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white font-bold h-12 rounded-xl shadow-lg shadow-blue-500/20 transition-all hover:-translate-y-0.5"
-                                    disabled={invLoading}
-                                >
-                                    {invLoading ? (
-                                        <span className="flex items-center gap-2">
-                                            <RefreshCcw className="w-4 h-4 animate-spin" /> Guardando...
-                                        </span>
-                                    ) : (
-                                        <span className="flex items-center gap-2">
-                                            <Plus className="w-4 h-4" /> Agregar al Inventario
-                                        </span>
-                                    )}
-                                </Button>
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    className="border-white/10 text-slate-400 hover:text-white h-12 rounded-xl px-6"
-                                    onClick={() => setShowForm(false)}
-                                >
-                                    Cancelar
-                                </Button>
-                            </div>
+                            <Button
+                                type="submit"
+                                className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold h-11 rounded-xl transition-all"
+                                disabled={invLoading}
+                            >
+                                {invLoading ? 'Guardando...' : 'Confirmar Registro'}
+                            </Button>
                         </form>
                     </CardContent>
                 </Card>
             )}
 
-            {/* ── Inventory Table ── */}
-            <Card className="border-white/5 bg-[#0b1120] overflow-hidden">
-                <CardHeader className="flex flex-row items-center justify-between pb-0">
-                    <div className="flex items-center gap-3">
-                        <CardTitle className="text-white text-lg font-bold">Inventario</CardTitle>
-                        <span className="px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[11px] font-black tracking-wide">
-                            {filteredInventory.length} {filteredInventory.length === 1 ? 'equipo' : 'equipos'}
-                        </span>
+            {/* ── Inventory Content ── */}
+            <div className="w-full">
+                <div className="flex items-center gap-3 mb-4 px-1">
+                    <h3 className="text-white text-lg font-bold">Inventario Regional</h3>
+                    <span className="px-2.5 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] font-black">
+                        {filteredInventory.length} ITEMS
+                    </span>
+                </div>
+
+                {/* Mobile List View / Desktop Table View */}
+                <Card className="border-white/5 bg-[#0b1120] overflow-hidden">
+                    <div className="block lg:hidden">
+                        {/* Mobile Cards */}
+                        <div className="divide-y divide-white/5">
+                            {filteredInventory.length === 0 ? (
+                                <div className="p-12 text-center text-slate-500 text-sm">No se encontraron equipos</div>
+                            ) : (
+                                filteredInventory.map(item => {
+                                    const status = statusConfig[item.status] || statusConfig.broken;
+                                    return (
+                                        <div key={item._id} className="p-4 space-y-3">
+                                            <div className="flex justify-between items-start">
+                                                <div className="flex items-center gap-3">
+                                                    <div className={`p-2 rounded-lg border ${status.border} ${status.bg}`}>
+                                                        {item.type === 'equipment' ? <Monitor className={`w-4 h-4 ${status.color}`} /> : <Package className={`w-4 h-4 ${status.color}`} />}
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="text-white font-bold text-sm">{item.name}</h4>
+                                                        <p className="text-[10px] text-slate-500 uppercase font-black">{item.brand} {item.model}</p>
+                                                    </div>
+                                                </div>
+                                                <Button variant="ghost" size="icon" onClick={() => handleDeleteInventory(item._id)} className="text-slate-600 h-8 w-8">
+                                                    <Trash2 className="w-3.5 h-3.5" />
+                                                </Button>
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-2">
+                                                <div className="bg-white/[0.02] p-2 rounded-lg border border-white/5">
+                                                    <p className="text-[9px] text-slate-600 font-bold uppercase mb-1">Dueño / Estado</p>
+                                                    <p className="text-xs text-slate-300 font-medium truncate">{item.ownerName || 'Stock Interno'}</p>
+                                                </div>
+                                                <div className="bg-white/[0.02] p-2 rounded-lg border border-white/5">
+                                                    <p className="text-[9px] text-slate-600 font-bold uppercase mb-1">Serial</p>
+                                                    <p className="text-xs text-slate-400 font-mono truncate">{item.serialNumber || '—'}</p>
+                                                </div>
+                                            </div>
+                                            <Select value={item.status} onValueChange={(val) => handleUpdateInventoryStatus(item._id, val)}>
+                                                <SelectTrigger className={`h-9 w-full border ${status.border} ${status.bg} ${status.color} font-bold text-[10px] uppercase rounded-lg`}>
+                                                    <span className="flex items-center gap-2">
+                                                        {status.icon}
+                                                        <SelectValue />
+                                                    </span>
+                                                </SelectTrigger>
+                                                <SelectContent className="bg-[#0f172a] border-white/10 text-white">
+                                                    <SelectItem value="repairing">⚙️ En Reparación</SelectItem>
+                                                    <SelectItem value="available">✅ Disponible</SelectItem>
+                                                    <SelectItem value="delivered">📦 Entregado</SelectItem>
+                                                    <SelectItem value="broken">❌ Dañado</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+                                    );
+                                })
+                            )}
+                        </div>
                     </div>
-                </CardHeader>
-                <CardContent className="pt-4">
-                    <div className="rounded-xl border border-white/5 overflow-hidden">
+
+                    <div className="hidden lg:block">
+                        {/* Desktop Table */}
                         <Table>
-                            <TableHeader className="bg-[#03060c]/80">
-                                <TableRow className="border-white/5 hover:bg-transparent">
-                                    <TableHead className="text-slate-500 font-extrabold uppercase text-[10px] tracking-wider py-4">Dispositivo</TableHead>
-                                    <TableHead className="text-slate-500 font-extrabold uppercase text-[10px] tracking-wider py-4">Info Técnica</TableHead>
-                                    <TableHead className="text-slate-500 font-extrabold uppercase text-[10px] tracking-wider py-4">Propietario</TableHead>
-                                    <TableHead className="text-slate-500 font-extrabold uppercase text-[10px] tracking-wider py-4">Estado</TableHead>
-                                    <TableHead className="text-right text-slate-500 font-extrabold uppercase text-[10px] tracking-wider py-4">Acción</TableHead>
+                            <TableHeader className="bg-[#03060c]/50">
+                                <TableRow className="border-white/5">
+                                    <TableHead className="text-slate-500 text-[10px] uppercase font-black py-4">Dispositivo</TableHead>
+                                    <TableHead className="text-slate-500 text-[10px] uppercase font-black py-4">Info Técnica</TableHead>
+                                    <TableHead className="text-slate-500 text-[10px] uppercase font-black py-4">Propietario</TableHead>
+                                    <TableHead className="text-slate-500 text-[10px] uppercase font-black py-4">Estado</TableHead>
+                                    <TableHead className="text-right text-slate-500 text-[10px] uppercase font-black py-4">Acción</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {filteredInventory.length === 0 ? (
-                                    <TableRow>
-                                        <TableCell colSpan={5} className="text-center py-24">
-                                            <div className="flex flex-col items-center gap-4">
-                                                <div className="p-5 rounded-2xl bg-slate-800/30 border border-white/5">
-                                                    <HardDrive className="w-8 h-8 text-slate-600" />
-                                                </div>
-                                                <div>
-                                                    <p className="text-slate-400 font-semibold text-sm">No se encontraron equipos</p>
-                                                    <p className="text-slate-600 text-xs mt-1">
-                                                        {searchTerm || filterStatus !== 'all'
-                                                            ? 'Intenta cambiar los filtros de búsqueda'
-                                                            : 'Agrega el primer dispositivo al inventario'}
-                                                    </p>
-                                                </div>
-                                                {!searchTerm && filterStatus === 'all' && (
-                                                    <Button
-                                                        onClick={() => setShowForm(true)}
-                                                        className="mt-2 bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500/20 rounded-xl text-xs font-bold px-4 h-9"
-                                                    >
-                                                        <Plus className="w-3.5 h-3.5 mr-1.5" /> Agregar Dispositivo
-                                                    </Button>
-                                                )}
-                                            </div>
-                                        </TableCell>
-                                    </TableRow>
-                                ) : (
-                                    filteredInventory.map((item) => {
-                                        const status = statusConfig[item.status] || statusConfig.broken;
-                                        return (
-                                            <TableRow
-                                                key={item._id}
-                                                className="border-white/[0.03] hover:bg-white/[0.02] transition-colors group"
-                                            >
-                                                <TableCell className="font-medium text-white p-4">
-                                                    <div className="flex items-center gap-3">
-                                                        <div className={`p-2.5 rounded-xl border ${status.border} ${status.bg} transition-all group-hover:scale-105`}>
-                                                            {item.type === 'equipment'
-                                                                ? <Monitor className={`w-4 h-4 ${status.color}`} />
-                                                                : <Package className={`w-4 h-4 ${status.color}`} />}
-                                                        </div>
-                                                        <div className="flex flex-col text-left">
-                                                            <span className="text-sm font-bold text-white leading-tight">{item.name}</span>
-                                                            <span className="text-[10px] text-slate-600 uppercase tracking-tight font-bold mt-0.5">
-                                                                {item.type === 'equipment' ? '🖥 Equipo' : '📦 Stock'}
-                                                            </span>
-                                                        </div>
+                                {filteredInventory.map((item) => {
+                                    const status = statusConfig[item.status] || statusConfig.broken;
+                                    return (
+                                        <TableRow key={item._id} className="border-white/[0.03] hover:bg-white/[0.01] group">
+                                            <TableCell className="p-4">
+                                                <div className="flex items-center gap-3">
+                                                    <div className={`p-2 rounded-lg border ${status.border} ${status.bg}`}>
+                                                        {item.type === 'equipment' ? <Monitor className={`w-4 h-4 ${status.color}`} /> : <Package className={`w-4 h-4 ${status.color}`} />}
                                                     </div>
-                                                </TableCell>
-                                                <TableCell className="p-4 text-left">
-                                                    <div className="text-slate-300 text-sm font-semibold">{item.brand} {item.model}</div>
-                                                    <div className="flex items-center gap-1.5 mt-1">
-                                                        <span className="text-[9px] text-slate-600 font-bold uppercase">SN:</span>
-                                                        <span className="text-[11px] text-slate-500 font-mono bg-white/[0.03] px-2 py-0.5 rounded">{item.serialNumber || '—'}</span>
+                                                    <div className="text-left">
+                                                        <p className="text-sm font-bold text-white leading-tight">{item.name}</p>
+                                                        <p className="text-[10px] text-slate-600 font-bold uppercase">{item.type === 'equipment' ? 'Equipo' : 'Repuesto'}</p>
                                                     </div>
-                                                </TableCell>
-                                                <TableCell className="p-4 text-left">
-                                                    {item.ownerName ? (
-                                                        <div className="flex items-center gap-2">
-                                                            <div className="w-7 h-7 rounded-lg bg-blue-500/10 border border-blue-500/15 flex items-center justify-center text-blue-400 text-[10px] font-black">
-                                                                {item.ownerName.charAt(0).toUpperCase()}
-                                                            </div>
-                                                            <span className="text-slate-300 text-sm font-medium">{item.ownerName}</span>
-                                                        </div>
-                                                    ) : (
-                                                        <span className="text-slate-600 text-xs italic flex items-center gap-1.5">
-                                                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400/50" />
-                                                            Disponible en stock
-                                                        </span>
-                                                    )}
-                                                </TableCell>
-                                                <TableCell className="p-4">
-                                                    <Select
-                                                        value={item.status}
-                                                        onValueChange={(val) => handleUpdateInventoryStatus(item._id, val)}
-                                                    >
-                                                        <SelectTrigger
-                                                            className={`h-9 w-[155px] border ${status.border} ${status.bg} ${status.color} font-bold text-[10px] uppercase rounded-lg gap-1.5 tracking-wide`}
-                                                        >
-                                                            <span className="flex items-center gap-1.5">
-                                                                {status.icon}
-                                                                <SelectValue />
-                                                            </span>
-                                                        </SelectTrigger>
-                                                        <SelectContent className="bg-[#0f172a] border-white/10 text-white">
-                                                            <SelectItem value="repairing">⚙️ En Reparación</SelectItem>
-                                                            <SelectItem value="available">✅ Disponible</SelectItem>
-                                                            <SelectItem value="delivered">📦 Entregado</SelectItem>
-                                                            <SelectItem value="broken">❌ Dañado</SelectItem>
-                                                        </SelectContent>
-                                                    </Select>
-                                                </TableCell>
-                                                <TableCell className="text-right p-4">
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="icon"
-                                                        onClick={() => handleDeleteInventory(item._id)}
-                                                        className="text-slate-600 hover:text-red-400 hover:bg-red-500/10 rounded-xl transition-all opacity-0 group-hover:opacity-100"
-                                                    >
-                                                        <Trash2 className="w-4 h-4" />
-                                                    </Button>
-                                                </TableCell>
-                                            </TableRow>
-                                        );
-                                    })
-                                )}
+                                                </div>
+                                            </TableCell>
+                                            <TableCell className="p-4 text-left">
+                                                <p className="text-slate-300 text-sm font-semibold">{item.brand} {item.model}</p>
+                                                <p className="text-[10px] text-slate-600 font-mono">{item.serialNumber || '—'}</p>
+                                            </TableCell>
+                                            <TableCell className="p-4 text-left">
+                                                <span className="text-slate-400 text-sm">{item.ownerName || 'Stock Central'}</span>
+                                            </TableCell>
+                                            <TableCell className="p-4">
+                                                <Select value={item.status} onValueChange={(val) => handleUpdateInventoryStatus(item._id, val)}>
+                                                    <SelectTrigger className={`h-8 border ${status.border} ${status.bg} ${status.color} font-bold text-[9px] uppercase rounded-md`}>
+                                                        <SelectValue />
+                                                    </SelectTrigger>
+                                                    <SelectContent className="bg-[#0f172a] border-white/10 text-white">
+                                                        <SelectItem value="repairing">Reparación</SelectItem>
+                                                        <SelectItem value="available">Disponible</SelectItem>
+                                                        <SelectItem value="delivered">Entregado</SelectItem>
+                                                        <SelectItem value="broken">Dañado</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                            </TableCell>
+                                            <TableCell className="text-right p-4">
+                                                <Button variant="ghost" size="icon" onClick={() => handleDeleteInventory(item._id)} className="text-slate-600 hover:text-red-400">
+                                                    <Trash2 className="w-4 h-4" />
+                                                </Button>
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })}
                             </TableBody>
                         </Table>
                     </div>
-                </CardContent>
-            </Card>
+                </Card>
+            </div>
         </div>
     );
 }

@@ -608,12 +608,44 @@ export default function LoginPage() {
                 @media (max-width: 1024px) {
                     .auth-page {
                         grid-template-columns: 1fr;
+                        display: block;
+                        overflow-y: auto;
                     }
                     .content-side {
+                        padding: 40px 20px;
+                        border-right: none;
+                        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                        width: 100%;
+                    }
+                    .logo-link {
+                        margin-bottom: 30px;
+                        justify-content: center;
+                    }
+                    .hero-text {
+                        text-align: center;
+                        margin-bottom: 30px;
+                    }
+                    .main-heading {
+                        font-size: 32px;
+                    }
+                    .description, .features-list, .footer-copyright {
                         display: none;
                     }
                     .form-side {
-                        padding: 60px 20px;
+                        padding: 40px 20px;
+                    }
+                }
+
+                @media (max-width: 480px) {
+                    .main-heading {
+                        font-size: 28px;
+                    }
+                    .form-title {
+                        font-size: 24px;
+                        text-align: center;
+                    }
+                    .form-subtitle {
+                        text-align: center;
                     }
                 }
             `}</style>

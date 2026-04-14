@@ -335,6 +335,7 @@ export default function AdminDashboard() {
                 <div className="brand">
                     <div className="logo-badge">⚡</div>
                     <span className="logo-text">TECH<span className="accent">REVIVE</span></span>
+                    <button className="close-sidebar-btn" onClick={() => setIsMobileMenuOpen(false)}>✕</button>
                 </div>
 
                 <nav className="nav-menu">
@@ -372,7 +373,11 @@ export default function AdminDashboard() {
             <main className="main-content">
                 <header className="main-header">
                     <div className="h-left">
-                        <button className="mobile-menu-btn" onClick={() => setIsMobileMenuOpen(true)}>
+                        <button 
+                            className="mobile-menu-btn" 
+                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                            aria-label="Toggle Sidebar"
+                        >
                             <span></span>
                             <span></span>
                             <span></span>
@@ -396,10 +401,10 @@ export default function AdminDashboard() {
 
                 <div className="content-container">
                     {activeTab === 'overview' && (
-                        <div className="dashboard-view">
+                        <div className="dashboard-view w-full overflow-hidden">
                             <div className="stats-grid">
                                 <div className="stat-card">
-                                    <span className="label">Usuarios Totales</span>
+                                    <span className="label">Usuarios</span>
                                     <div className="val-row">
                                         <span className="val">{data?.stats.totalUsers}</span>
                                         <span className="trend up">+12%</span>
@@ -415,7 +420,7 @@ export default function AdminDashboard() {
                                     <div className="progress-bg"><div className="progress-bar" style={{ width: '45%', background: '#facc15' }}></div></div>
                                 </div>
                                 <div className="stat-card">
-                                    <span className="label">Visitas Únicas</span>
+                                    <span className="label">Visitas</span>
                                     <div className="val-row">
                                         <span className="val">{data?.stats.pageViews}</span>
                                         <span className="trend up">+24%</span>
@@ -438,7 +443,28 @@ export default function AdminDashboard() {
                                         <h3>Últimos Leads</h3>
                                         <button className="btn-view-all">Ver todos</button>
                                     </div>
-                                    <div className="table-responsive">
+                                    
+                                    {/* Mobile Cards for Leads */}
+                                    <div className="lg:hidden space-y-4">
+                                        {data?.recentRequests.map((req: any) => (
+                                            <div key={req._id} className="p-4 bg-[#03060c] border border-white/5 rounded-2xl space-y-2">
+                                                <div className="flex justify-between items-start">
+                                                    <div>
+                                                        <p className="font-bold text-white text-sm">{req.name}</p>
+                                                        <p className="text-[11px] text-slate-500">{req.email}</p>
+                                                    </div>
+                                                    <span className={`badge ${req.status}`}>{req.status}</span>
+                                                </div>
+                                                <div className="pt-2 border-t border-white/[0.03]">
+                                                    <p className="text-[10px] text-slate-600 font-bold uppercase tracking-wider">Servicio Solicitado</p>
+                                                    <p className="text-xs text-slate-300 mt-1">{req.service}</p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    {/* Desktop Table for Leads */}
+                                    <div className="hidden lg:block table-responsive">
                                         <table>
                                             <thead>
                                                 <tr><th>Nombre</th><th>Servicio</th><th>Estado</th></tr>
@@ -471,7 +497,7 @@ export default function AdminDashboard() {
                                                 <div className="u-avatar">{u.name[0]}</div>
                                                 <div className="u-details">
                                                     <span className="un">{u.name}</span>
-                                                    <span className="ue">{u.email}</span>
+                                                    <span className="ue truncate max-w-[120px]">{u.email}</span>
                                                 </div>
                                                 <span className={`u-r ${u.role}`}>{u.role}</span>
                                             </div>
@@ -483,67 +509,102 @@ export default function AdminDashboard() {
                     )}
 
                     {activeTab === 'users' && (
-                        <div className="users-management-container">
+                        <div className="users-management-container space-y-8">
                             <div className="create-user-section">
-                                <section className="full-view-card">
-                                    <div className="view-header">
-                                        <h3>Registrar Nuevo Usuario</h3>
+                                <section className="full-view-card p-6 sm:p-8 bg-[#0b1120] border border-white/5 rounded-3xl">
+                                    <div className="view-header mb-6">
+                                        <h3 className="text-xl font-bold text-white">Registrar Nuevo Usuario</h3>
+                                        <p className="text-sm text-slate-500">Añade nuevos miembros al equipo administrativo.</p>
                                     </div>
                                     <form onSubmit={handleCreateUser} className="fancy-form">
                                         <div className="input-group">
                                             <label>Nombre Completo</label>
-                                            <input type="text" value={userForm.name} onChange={e => setUserForm({ ...userForm, name: e.target.value })} required />
+                                            <input type="text" placeholder="Juan Ocoro" value={userForm.name} onChange={e => setUserForm({ ...userForm, name: e.target.value })} required />
                                         </div>
                                         <div className="input-group">
                                             <label>Email</label>
-                                            <input type="email" value={userForm.email} onChange={e => setUserForm({ ...userForm, email: e.target.value })} required />
+                                            <input type="email" placeholder="email@ejemplo.com" value={userForm.email} onChange={e => setUserForm({ ...userForm, email: e.target.value })} required />
                                         </div>
                                         <div className="input-group">
-                                            <label>Contraseña Temporal</label>
-                                            <input type="password" value={userForm.password} onChange={e => setUserForm({ ...userForm, password: e.target.value })} required />
+                                            <label>Contraseña</label>
+                                            <input type="password" placeholder="••••••••" value={userForm.password} onChange={e => setUserForm({ ...userForm, password: e.target.value })} required />
                                         </div>
                                         <div className="input-group">
                                             <label>Rol Inicial</label>
-                                            <select value={userForm.role} onChange={e => setUserForm({ ...userForm, role: e.target.value })} style={{ background: '#03060c', color: '#fff', border: '1px solid #1e293b', padding: '14px', borderRadius: '12px' }}>
+                                            <select value={userForm.role} onChange={e => setUserForm({ ...userForm, role: e.target.value })}>
                                                 <option value="user">Usuario Estándar</option>
                                                 <option value="admin">Administrador</option>
                                             </select>
                                         </div>
-                                        <button className="btn-primary" style={{ gridColumn: 'span 2' }}>Crear y Enviar Accesos</button>
+                                        <button className="btn-primary col-span-1 sm:col-span-2 bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-blue-500/20">
+                                            Crear y Enviar Accesos
+                                        </button>
                                     </form>
                                 </section>
                             </div>
 
-                            <div className="full-view-card" style={{ marginTop: '30px' }}>
-                                <div className="view-header">
-                                    <h3>Directorio de Usuarios Completo</h3>
+                            <div className="full-view-card p-6 sm:p-8 bg-[#0b1120] border border-white/5 rounded-3xl">
+                                <div className="view-header mb-6">
+                                    <h3 className="text-xl font-bold text-white">Directorio de Usuarios</h3>
+                                    <p className="text-sm text-slate-500">Gestiona los permisos y accesos de los usuarios registrados.</p>
                                 </div>
-                                <table>
-                                    <thead>
-                                        <tr><th>Nombre Completo</th><th>Correo Electrónico</th><th>Rol Actual</th><th>Acciones</th></tr>
-                                    </thead>
-                                    <tbody>
-                                        {data?.recentUsers.map((u: any) => (
-                                            <tr key={u._id}>
-                                                <td>{u.name}</td>
-                                                <td>{u.email}</td>
-                                                <td>
-                                                    <select
-                                                        className={`role-select ${u.role}`}
-                                                        value={u.role}
-                                                        onChange={(e) => handleUpdateRole(u._id, e.target.value)}
-                                                    >
-                                                        <option value="user">User</option>
-                                                        <option value="admin">Admin</option>
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    <button className="btn-delete" onClick={() => handleDeleteUser(u._id)}>🗑️</button>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                
+                                {/* Mobile view: Cards for Users */}
+                                <div className="lg:hidden space-y-4">
+                                    {data?.recentUsers.map((u: any) => (
+                                        <div key={u._id} className="p-4 bg-[#03060c] border border-white/5 rounded-2xl flex items-center gap-3">
+                                            <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center font-bold text-blue-400 shrink-0">
+                                                {u.name[0].toUpperCase()}
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="font-bold text-white text-sm truncate">{u.name}</p>
+                                                <p className="text-[10px] text-slate-500 truncate">{u.email}</p>
+                                            </div>
+                                            <div className="flex flex-col items-end gap-2 shrink-0">
+                                                <select
+                                                    className={`role-select ${u.role}`}
+                                                    style={{ fontSize: '10px', padding: '4px 8px' }}
+                                                    value={u.role}
+                                                    onChange={(e) => handleUpdateRole(u._id, e.target.value)}
+                                                >
+                                                    <option value="user">User</option>
+                                                    <option value="admin">Admin</option>
+                                                </select>
+                                                <button className="text-xs text-slate-500 hover:text-red-400 p-1" onClick={() => handleDeleteUser(u._id)}>🗑️</button>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {/* Desktop view: Table for Users */}
+                                <div className="hidden lg:block table-responsive">
+                                    <table className="w-full">
+                                        <thead>
+                                            <tr><th>Nombre Completo</th><th>Correo Electrónico</th><th>Rol Actual</th><th>Acciones</th></tr>
+                                        </thead>
+                                        <tbody>
+                                            {data?.recentUsers.map((u: any) => (
+                                                <tr key={u._id}>
+                                                    <td className="font-bold text-slate-200">{u.name}</td>
+                                                    <td className="text-slate-400">{u.email}</td>
+                                                    <td>
+                                                        <select
+                                                            className={`role-select ${u.role}`}
+                                                            value={u.role}
+                                                            onChange={(e) => handleUpdateRole(u._id, e.target.value)}
+                                                        >
+                                                            <option value="user">User</option>
+                                                            <option value="admin">Admin</option>
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <button className="btn-delete hover:scale-125 transition-transform" onClick={() => handleDeleteUser(u._id)}>🗑️</button>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     )}
@@ -827,7 +888,7 @@ export default function AdminDashboard() {
                         <InventoryManagement 
                             requests={requests}
                             inventory={inventory}
-                            fetchInventory={fetchInventory}
+                                            fetchInventory={fetchInventory}
                             handleSaveInventory={handleSaveInventory}
                             handleDeleteInventory={handleDeleteInventory}
                             handleUpdateInventoryStatus={handleUpdateInventoryStatus}
@@ -869,7 +930,7 @@ export default function AdminDashboard() {
 
                                         <div className="input-group">
                                             <label>Título del Servicio</label>
-                                            <input type="text" value={serviceForm.title} onChange={e => setServiceForm({ ...serviceForm, title: e.target.value })} required />
+                                            <input type="text" placeholder="ej: Reparación de PC" value={serviceForm.title} onChange={e => setServiceForm({ ...serviceForm, title: e.target.value })} required />
                                         </div>
 
                                         <div className="form-row">
@@ -878,7 +939,7 @@ export default function AdminDashboard() {
                                                 <input type="text" value={serviceForm.icon} onChange={e => setServiceForm({ ...serviceForm, icon: e.target.value })} required />
                                             </div>
                                             <div className="input-group">
-                                                <label>Etiquetas (Separadas por comas)</label>
+                                                <label>Etiquetas (separadas por comas)</label>
                                                 <input type="text" placeholder="AWS, SSL, 24/7" value={serviceForm.tags} onChange={e => setServiceForm({ ...serviceForm, tags: e.target.value })} />
                                             </div>
                                         </div>
@@ -886,12 +947,7 @@ export default function AdminDashboard() {
                                         <div className="input-group">
                                             <div className="label-with-action">
                                                 <label>Descripción del Servicio</label>
-                                                <button
-                                                    type="button"
-                                                    className="btn-ai-magic"
-                                                    onClick={handleGenerateAIDesc}
-                                                    disabled={generatingAI}
-                                                >
+                                                <button type="button" className="btn-ai-magic" onClick={handleGenerateAIDesc} disabled={generatingAI}>
                                                     {generatingAI ? '🧠 Pensando...' : '✨ Generar con IA'}
                                                 </button>
                                             </div>
@@ -900,7 +956,7 @@ export default function AdminDashboard() {
 
                                         <div className="form-submit-area">
                                             <button type="submit" className="btn-save-modern" disabled={saving}>
-                                                {saving ? 'Guardando...' : 'Sincronizar con Web'}
+                                                {saving ? 'Guardando...' : '🔄 Sincronizar con Web'}
                                             </button>
                                             {serviceForm.id && (
                                                 <button type="button" className="btn-cancel" onClick={() => setServiceForm({ id: '', title: '', desc: '', icon: '🔧', tags: '', color: '#00a8ff', active: true })}>Descartar</button>
@@ -919,10 +975,9 @@ export default function AdminDashboard() {
                                             <p>{serviceForm.desc || 'Descripción profesional generada para captar clientes...'}</p>
                                             <div className="tags-box">
                                                 {(typeof serviceForm.tags === 'string' ? serviceForm.tags.split(',') : (serviceForm.tags || [])).map((t, i) => t.trim() && (
-                                                    <span key={i} style={{ color: serviceForm.color, border: `1px solid ${serviceForm.color}33`, background: `${serviceForm.color}0d` }}>{t}</span>
+                                                    <span key={i} style={{ color: serviceForm.color, border: `1px solid ${serviceForm.color}33`, background: `${serviceForm.color}0d` }}>{t.trim()}</span>
                                                 ))}
                                             </div>
-                                            <div className="arrow-preview" style={{ color: `${serviceForm.color}66` }}>→</div>
                                         </div>
                                     </div>
                                 </section>
@@ -932,30 +987,21 @@ export default function AdminDashboard() {
                                 <section className="current-services-list">
                                     <div className="sticky-list-header">
                                         <div className="list-head">
-                                            <h3>Inventario</h3>
+                                            <h3>Servicios</h3>
                                             <span className="count-badge">{services.length}</span>
                                         </div>
-
                                         <div className="filter-modes">
                                             <button className={serviceFilter === 'all' ? 'active' : ''} onClick={() => setServiceFilter('all')}>Todos</button>
                                             <button className={serviceFilter === 'active' ? 'active' : ''} onClick={() => setServiceFilter('active')}>Activos</button>
-                                            <button className={serviceFilter === 'draft' ? 'active' : ''} onClick={() => setServiceFilter('draft')}>Borradores</button>
+                                            <button className={serviceFilter === 'draft' ? 'active' : ''} onClick={() => setServiceFilter('draft')}>Borrador</button>
                                         </div>
-
-                                        <div className="tag-cloud-mini">
+                                        <div className="tag-cloud-mini" style={{ marginTop: '12px' }}>
                                             <span className={`tag-chip ${selectedTag === 'all' ? 'active' : ''}`} onClick={() => setSelectedTag('all')}>#all</span>
                                             {Array.from(new Set(services.flatMap(s => s.tags || []))).map(tag => (
-                                                <span
-                                                    key={tag}
-                                                    className={`tag-chip ${selectedTag === tag ? 'active' : ''}`}
-                                                    onClick={() => setSelectedTag(tag)}
-                                                >
-                                                    #{tag}
-                                                </span>
+                                                <span key={tag} className={`tag-chip ${selectedTag === tag ? 'active' : ''}`} onClick={() => setSelectedTag(tag)}>#{tag}</span>
                                             ))}
                                         </div>
                                     </div>
-
                                     <div className="s-manage-grid">
                                         {services
                                             .filter(s => {
@@ -965,7 +1011,7 @@ export default function AdminDashboard() {
                                             })
                                             .map(s => (
                                                 <div key={s.id} className={`s-manage-card ${!s.active ? 'inactive' : ''}`} onClick={() => setServiceForm({ ...s, tags: Array.isArray(s.tags) ? s.tags.join(', ') : (s.tags || '') })}>
-                                                    <div className="s-icon-box" style={{ color: s.color, background: s.color + '11' }}>{s.icon}</div>
+                                                    <div className="s-icon-box" style={{ color: s.color, background: s.color + '18' }}>{s.icon}</div>
                                                     <div className="s-content-box">
                                                         <span className="s-name">{s.title}</span>
                                                         <span className="s-id-text">{s.id}</span>
@@ -983,50 +1029,55 @@ export default function AdminDashboard() {
                     )}
 
                     {activeTab === 'metrics' && (
-                        <div className="metrics-dashboard">
+                        <div className="metrics-dashboard space-y-8">
                             <div className="metrics-header">
-                                <h3>Distribución de Tráfico y Conversión Semanal</h3>
+                                <h3 className="text-xl font-bold text-white">Análisis de Rendimiento Web</h3>
+                                <p className="text-sm text-slate-500">Tráfico y conversiones de los últimos 7 días.</p>
                             </div>
-                            <div className="metrics-content">
-                                <div className="charts-grid-main">
-                                    <div className="big-chart-container">
-                                        <div className="chart-info">
-                                            <div className="c-info-item"><span className="dot blue"></span> Visitas</div>
-                                            <div className="c-info-item"><span className="dot green"></span> Conversiones</div>
-                                        </div>
-                                        <div className="bars-area">
-                                            {[
-                                                { day: 'Lun', h1: '40%', h2: '15%' },
-                                                { day: 'Mar', h1: '60%', h2: '25%' },
-                                                { day: 'Mie', h1: '80%', h2: '45%' },
-                                                { day: 'Jue', h1: '70%', h2: '35%' },
-                                                { day: 'Vie', h1: '95%', h2: '60%' },
-                                                { day: 'Sab', h1: '45%', h2: '20%' },
-                                                { day: 'Dom', h1: '30%', h2: '10%' },
-                                            ].map(d => (
-                                                <div key={d.day} className="bar-group">
-                                                    <div className="bar-stack">
-                                                        <div className="bar-val b1" style={{ height: d.h1 }}></div>
-                                                        <div className="bar-val b2" style={{ height: d.h2 }}></div>
-                                                    </div>
-                                                    <span className="b-day">{d.day}</span>
-                                                </div>
-                                            ))}
-                                        </div>
+                            
+                            <div className="charts-grid-main">
+                                <div className="big-chart-container p-6 sm:p-10 bg-[#0b1120] border border-white/5 rounded-3xl overflow-hidden">
+                                    <div className="chart-info flex gap-6 mb-10">
+                                        <div className="flex items-center gap-2 text-xs font-bold text-slate-400"><span className="w-3 h-3 rounded-full bg-blue-500"></span> Visitas</div>
+                                        <div className="flex items-center gap-2 text-xs font-bold text-slate-400"><span className="w-3 h-3 rounded-full bg-green-500"></span> Conversiones</div>
                                     </div>
-                                    <div className="metrics-side-stats">
-                                        <div className="m-mini-stat">
-                                            <span>Tiempo Promedio</span>
-                                            <h4>4m 32s</h4>
-                                        </div>
-                                        <div className="m-mini-stat">
-                                            <span>Drop-off Rate</span>
-                                            <h4 style={{ color: '#ff3366' }}>12.4%</h4>
-                                        </div>
-                                        <div className="m-mini-stat">
-                                            <span>Nuevo vs Recurrente</span>
-                                            <h4>64% / 36%</h4>
-                                        </div>
+                                    <div className="bars-area flex items-end justify-between h-[200px] border-b border-white/5">
+                                        {[
+                                            { day: 'Lun', h1: '40%', h2: '15%' },
+                                            { day: 'Mar', h1: '60%', h2: '25%' },
+                                            { day: 'Mie', h1: '80%', h2: '45%' },
+                                            { day: 'Jue', h1: '70%', h2: '35%' },
+                                            { day: 'Vie', h1: '95%', h2: '60%' },
+                                            { day: 'Sab', h1: '45%', h2: '20%' },
+                                            { day: 'Dom', h1: '30%', h2: '10%' },
+                                        ].map(d => (
+                                            <div key={d.day} className="flex-1 flex flex-col items-center gap-3 h-full">
+                                                <div className="relative w-full max-w-[12px] sm:max-w-[24px] h-full flex flex-col-reverse justify-start">
+                                                    <div className="absolute inset-0 bg-white/5 rounded-full"></div>
+                                                    <div className="relative z-10 w-full bg-blue-500 rounded-full transition-all duration-1000" style={{ height: d.h1 }}></div>
+                                                    <div className="absolute bottom-0 z-20 w-full bg-green-500 rounded-full transition-all duration-1000 shadow-[0_0_15px_rgba(34,197,94,0.4)]" style={{ height: d.h2 }}></div>
+                                                </div>
+                                                <span className="text-[10px] font-bold text-slate-500">{d.day}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                                
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                    <div className="p-6 bg-[#0b1120] border border-white/5 rounded-2xl">
+                                        <p className="text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-1">Tiempo Promedio</p>
+                                        <h4 className="text-2xl font-bold text-white">4m 32s</h4>
+                                        <p className="text-[10px] text-green-400 mt-1">↑ 12% vs anterior</p>
+                                    </div>
+                                    <div className="p-6 bg-[#0b1120] border border-white/5 rounded-2xl">
+                                        <p className="text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-1">Drop-off Rate</p>
+                                        <h4 className="text-2xl font-bold text-red-500">12.4%</h4>
+                                        <p className="text-[10px] text-red-400/50 mt-1">↓ 2% mejorado</p>
+                                    </div>
+                                    <div className="p-6 bg-[#0b1120] border border-white/5 rounded-2xl">
+                                        <p className="text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-1">Nuevo vs Recurrente</p>
+                                        <h4 className="text-2xl font-bold text-blue-400">64% / 36%</h4>
+                                        <p className="text-[10px] text-slate-500 mt-1">Base estable</p>
                                     </div>
                                 </div>
                             </div>
@@ -1034,7 +1085,6 @@ export default function AdminDashboard() {
                     )}
                 </div>
             </main>
-
         </div>
     );
 }

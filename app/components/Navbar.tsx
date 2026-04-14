@@ -302,31 +302,50 @@ export default function Navbar() {
 
                 .mobile-menu {
                     position: absolute;
-                    top: 70px;
+                    top: 100%;
                     left: 0;
                     right: 0;
-                    background: rgba(5,8,16,0.97);
-                    backdrop-filter: blur(20px);
-                    border-bottom: 1px solid rgba(0, 168, 255, 0.15);
+                    background: rgba(5,8,16,0.98);
+                    backdrop-filter: blur(25px);
+                    border-bottom: 1px solid rgba(0, 168, 255, 0.2);
                     padding: 24px;
                     display: flex;
                     flex-direction: column;
-                    gap: 20px;
+                    gap: 16px;
+                    animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+                }
+
+                @keyframes slideDown {
+                    from { opacity: 0; transform: translateY(-10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+
+                .mobile-menu .nav-link {
+                    font-size: 16px;
+                    padding: 12px 16px;
+                    border-radius: 10px;
+                    background: rgba(255,255,255,0.02);
                 }
 
                 .user-name-mobile {
-                    font-size: 15px;
-                    color: #8899bb;
-                    padding: 0 12px;
+                    font-size: 14px;
+                    color: #64748b;
+                    padding: 8px 16px;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
                 }
 
                 .sign-out-btn-mobile {
-                    text-align: left;
-                    background: none;
-                    border: none;
-                    color: #ff3366;
+                    text-align: center;
+                    background: rgba(239, 68, 68, 0.1);
+                    border: 1px solid rgba(239, 68, 68, 0.2);
+                    color: #f87171;
+                    padding: 12px;
+                    border-radius: 12px;
                     font-size: 15px;
-                    padding: 8px 12px;
+                    font-weight: 700;
                     cursor: pointer;
                 }
 
@@ -357,28 +376,32 @@ export default function Navbar() {
                 .admin-btn-mobile {
                     display: flex;
                     align-items: center;
+                    justify-content: center;
                     gap: 8px;
-                    background: linear-gradient(135deg, rgba(0,168,255,0.1), rgba(0,85,204,0.1));
-                    border: 1px solid rgba(0,168,255,0.3);
-                    color: #00a8ff;
-                    padding: 12px 16px;
-                    border-radius: 10px;
+                    background: linear-gradient(135deg, rgba(0,168,255,0.2), rgba(0,85,204,0.2));
+                    border: 1px solid #00a8ff;
+                    color: #fff;
+                    padding: 14px;
+                    border-radius: 12px;
                     font-size: 15px;
                     font-weight: 700;
                     text-decoration: none;
-                    transition: all 0.2s;
                 }
 
-                .admin-btn-mobile:hover {
-                    background: rgba(0,168,255,0.2);
+                @media (max-width: 991px) {
+                    .navbar {
+                        padding: 0 24px;
+                    }
+                    .nav-links {
+                        gap: 16px;
+                    }
                 }
 
                 @media (max-width: 768px) {
-                    .navbar {
-                        padding: 0 20px;
-                    }
                     .md\:hidden { display: block; }
                     .hidden { display: none; }
+                    .navbar { height: 60px; }
+                    .mobile-menu { top: 60px; }
                 }
             `}</style>
         </nav>

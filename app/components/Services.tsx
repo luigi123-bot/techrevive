@@ -291,14 +291,31 @@ export default function Services() {
                     transform: translateY(-2px);
                 }
 
-                @keyframes fadeInUp {
-                    from { opacity: 0; transform: translateY(20px); }
-                    to { opacity: 1; transform: translateY(0); }
+                @media (max-width: 768px) {
+                    .services-section {
+                        padding: 60px 0;
+                    }
+                    .header {
+                        margin-bottom: 40px;
+                    }
+                    .section-title {
+                        font-size: 28px;
+                    }
+                    .section-subtitle {
+                        font-size: 14px;
+                    }
                 }
 
                 @media (max-width: 640px) {
                     .cards-grid {
                         grid-template-columns: 1fr;
+                        gap: 16px;
+                    }
+                    .service-card {
+                        padding: 24px 20px;
+                    }
+                    .cta-card {
+                        padding: 30px 20px;
                     }
                 }
             `}</style>

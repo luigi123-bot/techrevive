@@ -510,20 +510,88 @@ export default function Hero() {
                     animation: fadeInUp 0.8s 0.2s ease both;
                 }
 
+                @media (max-width: 992px) {
+                    .hero-container {
+                        gap: 40px;
+                        padding: 60px 24px;
+                    }
+                    .hero-description {
+                        max-width: 100%;
+                    }
+                }
+
                 @media (max-width: 768px) {
+                    .hero-section {
+                        padding-top: 50px;
+                        text-align: center;
+                    }
                     .hero-container {
                         grid-template-columns: 1fr;
-                        text-align: center;
-                        gap: 40px;
+                        gap: 50px;
+                    }
+                    .hero-badge {
+                        margin-left: auto;
+                        margin-right: auto;
                     }
                     .hero-description {
                         margin-left: auto;
                         margin-right: auto;
+                        font-size: 16px;
                     }
-                    .hero-badge, .cta-group, .trust-badges {
+                    .cta-group {
+                        justify-content: center;
+                        gap: 12px;
+                    }
+                    .btn-whatsapp, .btn-secondary {
+                        width: 100%;
+                        max-width: 320px;
                         justify-content: center;
                     }
-                    .hidden { display: none; }
+                    .trust-badges {
+                        justify-content: center;
+                        gap: 16px;
+                    }
+                    .hero-visual {
+                        margin-top: 20px;
+                    }
+                    .stat-chips {
+                        max-width: 450px;
+                        margin-left: auto;
+                        margin-right: auto;
+                    }
+                }
+
+                @media (max-width: 480px) {
+                    .hero-container {
+                        padding: 40px 16px;
+                    }
+                    .display-top, .display-main {
+                        font-size: 32px;
+                    }
+                    .display-sub {
+                        font-size: 22px;
+                    }
+                    .hero-description {
+                        font-size: 15px;
+                        line-height: 1.6;
+                    }
+                    .cta-group {
+                        flex-direction: column;
+                        align-items: center;
+                    }
+                    .btn-whatsapp, .btn-secondary {
+                        width: 100%;
+                        padding: 14px 20px;
+                    }
+                    .trust-item {
+                        font-size: 11px;
+                    }
+                    .stat-chip {
+                        padding: 10px 8px;
+                    }
+                    .stat-num {
+                        font-size: 16px;
+                    }
                 }
             `}</style>
         </section>

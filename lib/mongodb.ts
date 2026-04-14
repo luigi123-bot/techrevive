@@ -1,7 +1,14 @@
 import mongoose from 'mongoose';
+import dns from 'node:dns';
 
-// Configuración de DNS optimizada solo para la conexión de Mongoose si es necesario
-// dns.setServers se eliminó para evitar conflictos globales en el proceso Node.js
+// Forzar el uso de los servidores DNS de Google para resolver registros SRV de MongoDB Atlas
+// Esto soluciona el error ECONNREFUSED en querySrv cuando el DNS local no es confiable.
+dns.setServers(['8.8.8.8', '8.8.4.4']);
+
+// Forzar la resolución de DNS a IPv4 primero
+if (typeof dns.setDefaultResultOrder === 'function') {
+  dns.setDefaultResultOrder('ipv4first');
+}
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
@@ -42,8 +49,14 @@ async function dbConnect() {
 
     try {
         cached.conn = await cached.promise;
-    } catch (e) {
+    } catch (e: any) {
         cached.promise = null;
+        console.error('❌ Error detallado de conexión a MongoDB:', {
+            mensaje: e.message,
+            codigo: e.code,
+            syscall: e.syscall,
+            hostname: e.hostname
+        });
         throw e;
     }
 
